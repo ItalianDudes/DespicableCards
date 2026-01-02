@@ -1,0 +1,23 @@
+@import url(common.css);
+
+.root {
+    -fx-base: #ececec;
+    -fx-background: #f4f4f4;
+    -fx-control-inner-background: #f4f4f4;
+    -fx-text-fill: black;
+    -fx-accent: #0096C9;
+}
+
+.button {
+    -fx-background-color: linear-gradient(#f0f0f0 0%, #d3d3d3 25%, #c8c8c8 75%, #a9a9a9 100%);
+    -fx-text-fill: black;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#a9a9a9 0%, #c8c8c8 25%, #d3d3d3 75%, #f0f0f0 100%);
+}
+
+.text-input {
+    -fx-background-color: #f4f4f4;
+    -fx-text-fill: black;
+}

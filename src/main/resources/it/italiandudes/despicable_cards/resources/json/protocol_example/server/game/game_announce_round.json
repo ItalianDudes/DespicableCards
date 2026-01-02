@@ -1,0 +1,8 @@
+{
+  "master": "uuid",
+  "blackcard": {
+    "card_id": "uuid",
+    "content": "text",
+    "blanks": "2"
+  }
+}

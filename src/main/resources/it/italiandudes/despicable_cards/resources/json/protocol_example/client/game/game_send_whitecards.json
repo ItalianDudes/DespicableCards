@@ -1,0 +1,15 @@
+{
+  "player": "uuid",
+  "choices": [
+    {
+      "card_id": "uuid",
+      "order_index": 0,
+      "wildcard_content": "This field is only present if the card is a wildcard"
+    },
+    {
+      "card_id": "uuid",
+      "order_index": 1,
+      "wildcard_content": "This field is only present if the card is a wildcard"
+    }
+  ]
+}

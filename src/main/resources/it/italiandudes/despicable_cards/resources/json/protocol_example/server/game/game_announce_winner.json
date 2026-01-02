@@ -1,0 +1,21 @@
+{
+  "winner": "uuid",
+  "blackcard": "content",
+  "winning_whitecards": [
+    "text", "text", "text"
+  ],
+  "player_choices": [
+    {
+      "player": "uuid",
+      "choices": [
+        "text", "text", "text"
+      ]
+    },
+    {
+      "player": "uuid1",
+      "choices": [
+        "text", "text", "text"
+      ]
+    }
+  ]
+}

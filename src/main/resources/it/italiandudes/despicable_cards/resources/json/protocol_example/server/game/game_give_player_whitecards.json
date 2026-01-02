@@ -1,0 +1,15 @@
+{
+  "player": "uuid",
+  "whitecards": [
+    {
+      "card_id": "uuid",
+      "content": "content",
+      "wildcard": false
+    },
+    {
+      "card_id": "uuid",
+      "content": "This is a wildcard, you can fill up this field to send what you like.",
+      "wildcard": true
+    }
+  ]
+}

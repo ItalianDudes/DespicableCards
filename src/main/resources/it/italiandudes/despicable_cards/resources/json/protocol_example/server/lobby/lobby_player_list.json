@@ -1,0 +1,14 @@
+{
+  "players": [
+    {
+      "player": "uuid1",
+      "username": "username1",
+      "ready": true
+    },
+    {
+      "player": "uuid2",
+      "username": "username2",
+      "ready": false
+    }
+  ]
+}

@@ -50,6 +50,12 @@ public final class JFXDefs {
             public static final String FXML_LOADING = FXML_DIR + "SceneLoading.fxml";
             public static final String FXML_MAIN_MENU = FXML_DIR + "SceneMainMenu.fxml";
             public static final String FXML_SETTINGS_EDITOR = FXML_DIR + "SceneSettingsEditor.fxml";
+
+            // Game
+            public static final class Game {
+                private static final String GAME_DIR = FXML_DIR + "game/";
+                public static final String FXML_LOBBY = GAME_DIR + "SceneGameLobby.fxml";
+            }
         }
 
         // GIF Location

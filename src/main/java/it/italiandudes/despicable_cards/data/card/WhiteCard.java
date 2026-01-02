@@ -1,20 +1,22 @@
-package it.italiandudes.despicable_cards.javafx.components;
+package it.italiandudes.despicable_cards.data.card;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
-public class WhiteCardFX extends Group {
+public class WhiteCard extends Group {
 
     // Attributes
     @NotNull private final Rectangle card;
+    @NotNull private final String uuid;
     @NotNull private final String content;
     private final boolean isWildcard;
 
     // Constructors
-    public WhiteCardFX(@NotNull final String content, final boolean isWildcard) {
+    public WhiteCard(@NotNull final String uuid, @NotNull final String content, final boolean isWildcard) {
         super();
+        this.uuid = uuid;
         this.content = content;
         this.isWildcard = isWildcard;
         card = new Rectangle();
@@ -22,11 +24,14 @@ public class WhiteCardFX extends Group {
         card.setFill(Color.WHITE);
         card.setStroke(Color.BLACK);
     }
-    public WhiteCardFX(@NotNull final String content) {
-        this(content, false);
+    public WhiteCard(@NotNull final String uuid, @NotNull final String content) {
+        this(uuid, content, false);
     }
 
     // Methods
+    public @NotNull String getUuid() {
+        return uuid;
+    }
     @NotNull
     public Rectangle getCard() {
         return card;
@@ -39,18 +44,17 @@ public class WhiteCardFX extends Group {
         return isWildcard;
     }
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof WhiteCardFX whiteCard)) return false;
-        if (isWildcard() != whiteCard.isWildcard()) return false;
-        if (!getCard().equals(whiteCard.getCard())) return false;
-        return getContent().equals(whiteCard.getContent());
+    public final boolean equals(Object o) {
+        if (!(o instanceof WhiteCard whiteCard)) return false;
+
+        return isWildcard() == whiteCard.isWildcard() && getCard().equals(whiteCard.getCard()) && getUuid().equals(whiteCard.getUuid()) && getContent().equals(whiteCard.getContent());
     }
     @Override
     public int hashCode() {
         int result = getCard().hashCode();
+        result = 31 * result + getUuid().hashCode();
         result = 31 * result + getContent().hashCode();
-        result = 31 * result + (isWildcard() ? 1 : 0);
+        result = 31 * result + Boolean.hashCode(isWildcard());
         return result;
     }
     @Override @NotNull

@@ -13,6 +13,7 @@ public final class DiscordRichPresenceManager {
     public static final class States {
         public static final String MENU = "Nel Menu";
         public static final String SETTINGS = "Modificando le Impostazioni";
+        public static final String IN_LOBBY = "In Lobby";
         public static final String IN_GAME = "In Gioco";
     }
 

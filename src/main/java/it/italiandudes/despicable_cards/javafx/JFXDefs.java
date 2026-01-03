@@ -49,6 +49,8 @@ public final class JFXDefs {
             private static final String FXML_DIR = Defs.Resources.PROJECT_RESOURCES_ROOT + "fxml/";
             public static final String FXML_LOADING = FXML_DIR + "SceneLoading.fxml";
             public static final String FXML_MAIN_MENU = FXML_DIR + "SceneMainMenu.fxml";
+            public static final String FXML_PROMPT_HOST = FXML_DIR + "ScenePromptHost.fxml";
+            public static final String FXML_PROMPT_JOIN = FXML_DIR + "ScenePromptJoin.fxml";
             public static final String FXML_SETTINGS_EDITOR = FXML_DIR + "SceneSettingsEditor.fxml";
 
             // Game

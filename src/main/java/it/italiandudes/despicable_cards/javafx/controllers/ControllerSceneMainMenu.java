@@ -6,6 +6,8 @@ import it.italiandudes.despicable_cards.features.DiscordRichPresenceManager;
 import it.italiandudes.despicable_cards.javafx.Client;
 import it.italiandudes.despicable_cards.javafx.JFXDefs;
 import it.italiandudes.despicable_cards.javafx.scene.SceneLoading;
+import it.italiandudes.despicable_cards.javafx.scene.ScenePromptHost;
+import it.italiandudes.despicable_cards.javafx.scene.ScenePromptJoin;
 import it.italiandudes.despicable_cards.javafx.scene.SceneSettingsEditor;
 import it.italiandudes.despicable_cards.utils.Defs;
 import it.italiandudes.despicable_cards.utils.Updater;
@@ -24,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -186,9 +189,17 @@ public final class ControllerSceneMainMenu {
 
     // EDT
     @FXML
-    private void hostGame() {}
+    private void hostGame() {
+        SceneController hostController = ScenePromptHost.getScene();
+        Stage hostPopup = Client.initPopupStage(hostController);
+        hostPopup.showAndWait();
+    }
     @FXML
-    private void joinGame() {}
+    private void joinGame() {
+        SceneController joinController = ScenePromptJoin.getScene();
+        Stage joinPopup = Client.initPopupStage(joinController);
+        joinPopup.showAndWait();
+    }
     @FXML
     private void showReportBanner() {
         ClipboardContent link = new ClipboardContent();
@@ -199,7 +210,7 @@ public final class ControllerSceneMainMenu {
         try {
             if (result && Client.getApplicationInstance() != null) HostServicesDelegate.getInstance(Client.getApplicationInstance()).showDocument(url);
         } catch (Exception e) {
-            Logger.log(e);
+            Logger.log(e, Defs.LOGGER_CONTEXT);
             new ErrorAlert(Client.getStage(),"ERRORE", "Errore Interno", "Si e' verificato un errore durante l'apertura del browser predefinito.\nIl link alla pagina e' comunque disponibile negli appunti di sistema.");
         }
     }
@@ -214,7 +225,7 @@ public final class ControllerSceneMainMenu {
             try {
                 HostServicesDelegate.getInstance(Client.getApplicationInstance()).showDocument(Updater.LATEST_PAGE);
             } catch (Exception e) {
-                Logger.log(e);
+                Logger.log(e, Defs.LOGGER_CONTEXT);
                 new ErrorAlert(Client.getStage(),"ERRORE", "Errore Interno", "Si e' verificato un errore durante l'apertura del browser predefinito.\nIl link alla pagina e' comunque disponibile negli appunti di sistema.");
             }
         }

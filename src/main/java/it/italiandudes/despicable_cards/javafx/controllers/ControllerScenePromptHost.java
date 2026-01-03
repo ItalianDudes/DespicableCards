@@ -1,0 +1,114 @@
+package it.italiandudes.despicable_cards.javafx.controllers;
+
+import it.italiandudes.despicable_cards.data.player.PlayerData;
+import it.italiandudes.despicable_cards.javafx.Client;
+import it.italiandudes.despicable_cards.javafx.scene.game.SceneGameLobby;
+import it.italiandudes.despicable_cards.protocol.ClientProtocols;
+import it.italiandudes.despicable_cards.server.ServerInstance;
+import it.italiandudes.despicable_cards.utils.Defs;
+import it.italiandudes.despicable_cards.utils.JSONSerializer;
+import it.italiandudes.idl.javafx.JFXUtils;
+import it.italiandudes.idl.javafx.UIElementConfigurator;
+import it.italiandudes.idl.javafx.alert.ErrorAlert;
+import it.italiandudes.idl.logger.Logger;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.json.JSONObject;
+
+import java.net.Socket;
+
+public final class ControllerScenePromptHost {
+
+    // Graphic Elements
+    @FXML private TextField textFieldUsername;
+    @FXML private TextField passwordFieldServerPassword;
+    @FXML private Spinner<Integer> spinnerMaxPlayers;
+    @FXML private Spinner<Integer> spinnerPort;
+    @FXML private Button buttonBack;
+    @FXML private Button buttonCreateLobby;
+
+    // Initialize
+    @FXML
+    private void initialize() {
+        spinnerMaxPlayers.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, Defs.MAX_PLAYERS_LIMIT));
+        spinnerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65535, 45000, 1));
+        spinnerPort.getEditor().setTextFormatter(UIElementConfigurator.configureNewIntegerTextFormatter());
+    }
+
+    // Methods
+    private void disableAll() {
+        textFieldUsername.setDisable(true);
+        passwordFieldServerPassword.setDisable(true);
+        spinnerMaxPlayers.setDisable(true);
+        spinnerPort.setDisable(true);
+        buttonBack.setDisable(true);
+        buttonCreateLobby.setDisable(true);
+    }
+    private void enableAll() {
+        textFieldUsername.setDisable(false);
+        passwordFieldServerPassword.setDisable(false);
+        spinnerMaxPlayers.setDisable(false);
+        spinnerPort.setDisable(false);
+        buttonBack.setDisable(false);
+        buttonCreateLobby.setDisable(false);
+    }
+
+    // EDT
+    @FXML
+    private void createLobby() {
+        disableAll();
+        String username = textFieldUsername.getText();
+        if (username.trim().isBlank()) {
+            new ErrorAlert(Client.getStage(), "ERRORE", "Errore di Inserimento", "Il campo \"Nome Utente\" e' obbligatorio.");
+            enableAll();
+            return;
+        }
+        String password = passwordFieldServerPassword.getText();
+        if (password.trim().isBlank()) password = null;
+        if (password != null) password = DigestUtils.sha512Hex(password);
+        String portText = spinnerPort.getEditor().getText();
+        int port;
+        try {
+            port = Integer.parseInt(portText);
+            if (port <= 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            new ErrorAlert(Client.getStage(), "ERRORE", "Errore di Inserimento", "La porta deve essere un numero intero compreso da 1 e 65535 estremi inclusi.");
+            enableAll();
+            return;
+        }
+        String finalPassword = password;
+        JFXUtils.startVoidServiceTask(() -> {
+            ServerInstance.newInstance(port, finalPassword); // TODO: add maxPlayers
+            Socket socket = null;
+            try {
+                socket = new Socket("127.0.0.1", port);
+                String sha512password = finalPassword != null ? DigestUtils.sha512Hex(finalPassword) : null;
+                JSONSerializer.writeJSONObject(socket.getOutputStream(), ClientProtocols.Handshake.getRequest(username, sha512password));
+                JSONObject response = JSONSerializer.readJSONObject(socket.getInputStream());
+                String uuid = response.getString("uuid");
+                PlayerData playerData = new PlayerData(uuid, username, false);
+                Socket finalSocket = socket;
+                Platform.runLater(() -> {
+                    Client.setScene(SceneGameLobby.getScene(playerData, finalSocket));
+                    back();
+                });
+            } catch (Exception e) {
+                Logger.log(e, Defs.LOGGER_CONTEXT);
+                try {
+                    if (socket != null) socket.close();
+                } catch (Exception ignored) {}
+                ServerInstance.stopInstance();
+                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Errore di Rete", "Si e' verificato un errore di rete durante la connessione al server locale."));
+            }
+        });
+    }
+    @FXML
+    private void back() {
+        buttonBack.getScene().getWindow().hide();
+    }
+}

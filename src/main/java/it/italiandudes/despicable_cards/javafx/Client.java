@@ -2,12 +2,11 @@ package it.italiandudes.despicable_cards.javafx;
 
 import it.italiandudes.despicable_cards.DespicableCards;
 import it.italiandudes.despicable_cards.features.DiscordRichPresenceManager;
-import it.italiandudes.despicable_cards.javafx.scene.SceneLoading;
 import it.italiandudes.despicable_cards.javafx.scene.SceneMainMenu;
 import it.italiandudes.despicable_cards.javafx.utils.Settings;
 import it.italiandudes.despicable_cards.javafx.utils.ThemeHandler;
+import it.italiandudes.despicable_cards.server.ServerInstance;
 import it.italiandudes.despicable_cards.utils.Defs;
-import it.italiandudes.idl.javafx.alert.ErrorAlert;
 import it.italiandudes.idl.javafx.components.SceneController;
 import it.italiandudes.idl.logger.Logger;
 import javafx.application.Application;
@@ -127,17 +126,6 @@ public final class Client extends Application {
         ThemeHandler.loadConfigTheme(popupStage.getScene());
         return popupStage;
     }
-    public static void showMessageAndGoToMenu(@NotNull final Throwable t) {
-        Logger.log(t, Defs.LOGGER_CONTEXT);
-        Platform.runLater(() -> {
-            new ErrorAlert(Client.getStage(),"ERRORE", "Errore di Database", "Si e' verificato un errore durante la comunicazione con il database, ritorno al menu principale.");
-            setScene(SceneLoading.getScene());
-            // DBManager.closeConnection();
-            setScene(SceneMainMenu.getScene());
-        });
-
-
-    }
     public static void exit() {
         exit(0);
     }
@@ -149,6 +137,7 @@ public final class Client extends Application {
         }
         Platform.runLater(() -> STAGE.hide());
         // DBManager.closeConnection();
+        ServerInstance.stopInstance();
         DiscordRichPresenceManager.shutdownRichPresence();
         DespicableCards.appClosed();
         if (!DespicableCards.isStartedFromLauncher()) {

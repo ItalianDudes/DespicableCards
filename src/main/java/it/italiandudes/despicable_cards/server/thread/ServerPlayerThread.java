@@ -72,9 +72,15 @@ public final class ServerPlayerThread extends Thread {
                     }
                     serverPlayerData.setWhiteCardChoices(cardChoices);*/
                 } else if (message.has("winner")) {
-                    // TODO: check if is not winning himself and check if the sender is REALLY the master.
-                    ServerPlayerData winnerData = ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayerDataWithUUID(message.getString("winner"));
-                    ServerInstance.getInstance().broadcastMessage(ServerProtocols.Game.getAnnounceWinner(winnerData.getUuid(), winnerData.getWhiteCardChoices(), ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()));
+                    // TODO: check if the sender is REALLY the master.
+                    String winnerUuid = message.getString("winner");
+                    ServerPlayerData winnerData = winnerUuid != null ? ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayerDataWithUUID(winnerUuid) : null;
+                    if (serverPlayerData.equals(winnerData)) winnerData = null;
+                    ServerInstance.getInstance().broadcastMessage(ServerProtocols.Game.getAnnounceWinner(
+                            winnerData != null ? winnerData.getUuid() : null,
+                            winnerData != null ? winnerData.getWhiteCardChoices() : null,
+                            ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData())
+                    );
                 }
             }
         } catch (Exception e) {

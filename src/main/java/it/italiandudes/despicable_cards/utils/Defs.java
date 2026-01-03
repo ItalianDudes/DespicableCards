@@ -21,6 +21,7 @@ public final class Defs {
 
     // Logger Context
     public static final String LOGGER_CONTEXT = "DespicableCards";
+    public static final String SERVER_LOGGER_CONTEXT = "Server";
 
     // DB Version
     public static final String DB_VERSION = "0.0";
@@ -34,6 +35,10 @@ public final class Defs {
             throw new RuntimeException(e);
         }
     }
+
+    // Limits
+    public static final int MAX_WHITECARDS = 10;
+    public static final int MAX_PLAYERS_LIMIT = 10;
 
     // JSON Settings
     public static final class SettingsKeys {

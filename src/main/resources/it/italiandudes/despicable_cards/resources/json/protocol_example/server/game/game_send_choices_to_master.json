@@ -1,0 +1,30 @@
+{
+  "players_choices": [
+    {
+      "player": "uuid",
+      "combination": [
+        {
+          "order_index": 0,
+          "content": "content"
+        },
+        {
+          "order_index": 1,
+          "content": "content"
+        }
+      ]
+    },
+    {
+      "player": "uuid",
+      "combination": [
+        {
+          "order_index": 0,
+          "content": "content1"
+        },
+        {
+          "order_index": 1,
+          "content": "content1"
+        }
+      ]
+    }
+  ]
+}

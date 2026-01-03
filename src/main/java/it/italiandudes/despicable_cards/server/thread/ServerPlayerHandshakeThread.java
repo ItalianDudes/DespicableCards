@@ -1,7 +1,9 @@
-package it.italiandudes.despicable_cards.server.server;
+package it.italiandudes.despicable_cards.server.thread;
 
+import it.italiandudes.despicable_cards.data.player.ServerPlayerData;
 import it.italiandudes.despicable_cards.protocol.ServerProtocols;
 import it.italiandudes.despicable_cards.server.ServerInstance;
+import it.italiandudes.despicable_cards.utils.Defs;
 import it.italiandudes.despicable_cards.utils.JSONSerializer;
 import it.italiandudes.idl.logger.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +37,14 @@ public final class ServerPlayerHandshakeThread extends Thread {
             JSONObject request = JSONSerializer.readJSONObject(socket.getInputStream());
             String username = request.getString("username");
             if (ServerInstance.getInstance().getSha512password() != null) { // Password Check
-                JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getPasswordAlgorithm());
-                JSONObject pwdJson = JSONSerializer.readJSONObject(socket.getInputStream());
-                String serverPassword = pwdJson.getString("server_password");
-                if (!serverPassword.equals(ServerInstance.getInstance().getSha512password())) {
+                if (request.has("server_password")) {
+                    String serverPassword = request.getString("server_password");
+                    if (!serverPassword.equals(ServerInstance.getInstance().getSha512password())) {
+                        JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getResponseInvalidPassword());
+                        socket.close();
+                        return;
+                    }
+                } else {
                     JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getResponseInvalidPassword());
                     socket.close();
                     return;
@@ -52,13 +58,16 @@ public final class ServerPlayerHandshakeThread extends Thread {
             * */
 
             // Accepting new player
-            String playerGuid = UUID.randomUUID().toString();
+            String playerUuid = UUID.randomUUID().toString();
             JSONObject okResponse = new JSONObject();
-            okResponse.put("uuid", playerGuid);
+            okResponse.put("uuid", playerUuid);
             JSONSerializer.writeJSONObject(socket.getOutputStream(), okResponse);
-            new ServerPlayerThread(socket, username, playerGuid).start();
+            ServerPlayerData serverPlayerData = new ServerPlayerData(socket, playerUuid, username, false);
+            ServerInstance.getInstance().getServerPlayerDataManager().addAndBroadcast(serverPlayerData);
+            JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Lobby.getLobbyPlayersList(ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()));
+            new ServerPlayerThread(serverPlayerData).start();
         } catch (IOException e) {
-            Logger.log(e);
+            Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
             try {
                 JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getResponseUnknownError());
             } catch (Exception ignored) {}

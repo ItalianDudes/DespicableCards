@@ -1,4 +1,4 @@
-package it.italiandudes.despicable_cards.server;
+package it.italiandudes.despicable_cards.server.thread;
 
 import it.italiandudes.despicable_cards.utils.Defs;
 import it.italiandudes.idl.logger.InfoFlags;
@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public final class ServerListener extends Thread {
+public final class ServerListenerThread extends Thread {
 
     // Attributes
     private final int port;
 
     // Constructors
-    public ServerListener(int port) {
+    public ServerListenerThread(int port) {
         this.port = port;
         setDaemon(true);
         setName("DespicableCards-ServerListener-" + port + "-Daemon");
@@ -27,7 +27,7 @@ public final class ServerListener extends Thread {
     }
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ServerListener that)) return false;
+        if (!(o instanceof ServerListenerThread that)) return false;
 
         return getPort() == that.getPort();
     }
@@ -48,7 +48,7 @@ public final class ServerListener extends Thread {
             while (!isInterrupted()) {
                 try {
                     socket = serverSocket.accept();
-
+                    new ServerPlayerHandshakeThread(socket).start();
                 } catch (Exception e) {
                     if (socket != null) {
                         try {
@@ -58,10 +58,10 @@ public final class ServerListener extends Thread {
                 }
             }
         } catch (IllegalArgumentException e) {
-            Logger.log("Invalid port value", Defs.LOGGER_CONTEXT);
+            Logger.log("Invalid port value", Defs.SERVER_LOGGER_CONTEXT);
         } catch (IOException e) {
-            Logger.log("An error has occured while open ServerSocket on port " + port, new InfoFlags(true, false), Defs.LOGGER_CONTEXT);
-            Logger.log(e);
+            Logger.log("An error has occurred while open ServerSocket on port " + port, new InfoFlags(true, false), Defs.SERVER_LOGGER_CONTEXT);
+            Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
         }
     }
 }

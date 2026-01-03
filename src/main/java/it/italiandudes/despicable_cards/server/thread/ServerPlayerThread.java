@@ -71,8 +71,7 @@ public final class ServerPlayerThread extends Thread {
                         cardChoices.add(new WhiteCardChoice(choice.getString("card_id"), choice.getInt("order_index"), wildcardContent));
                     }
                     serverPlayerData.setWhiteCardChoices(cardChoices);*/
-                } else if (message.has("winner")) {
-                    // TODO: check if the sender is REALLY the master.
+                } else if (message.has("winner") && ServerInstance.getInstance().getServerStateThread() instanceof ServerGameThread gameThread && gameThread.getMasterPlayerData().equals(serverPlayerData)) {
                     String winnerUuid = message.getString("winner");
                     ServerPlayerData winnerData = winnerUuid != null ? ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayerDataWithUUID(winnerUuid) : null;
                     if (serverPlayerData.equals(winnerData)) winnerData = null;

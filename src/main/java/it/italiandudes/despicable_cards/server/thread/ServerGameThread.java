@@ -40,6 +40,10 @@ public final class ServerGameThread extends Thread {
         }
         return true;
     }
+    @NotNull
+    public ServerPlayerData getMasterPlayerData() {
+        return masterPlayerData;
+    }
 
     // Runnable
     @Override

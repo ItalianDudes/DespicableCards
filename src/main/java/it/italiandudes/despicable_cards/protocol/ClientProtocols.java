@@ -2,6 +2,7 @@ package it.italiandudes.despicable_cards.protocol;
 
 import it.italiandudes.despicable_cards.data.card.WhiteCardChoice;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,14 +10,10 @@ public final class ClientProtocols {
 
     // Handshake JSONObjects
     public static final class Handshake {
-        public static @NotNull JSONObject getRequest(@NotNull final String username) {
+        public static @NotNull JSONObject getRequest(@NotNull final String username, @Nullable final String sha512password) {
             JSONObject json = new JSONObject();
             json.put("username", username);
-            return json;
-        }
-        public static @NotNull JSONObject getPassword(@NotNull final String sha512password) {
-            JSONObject json = new JSONObject();
-            json.put("server_password", sha512password);
+            if (sha512password != null) json.put("server_password", sha512password);
             return json;
         }
     }

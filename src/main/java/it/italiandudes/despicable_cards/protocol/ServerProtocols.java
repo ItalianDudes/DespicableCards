@@ -1,24 +1,22 @@
 package it.italiandudes.despicable_cards.protocol;
 
-import it.italiandudes.despicable_cards.data.PlayerLobbyInfo;
+import it.italiandudes.despicable_cards.data.player.ServerPlayerData;
 import it.italiandudes.despicable_cards.data.card.BlackCard;
 import it.italiandudes.despicable_cards.data.card.WhiteCard;
+import it.italiandudes.despicable_cards.data.card.WhiteCardChoice;
 import it.italiandudes.despicable_cards.data.enums.ServerRejectReason;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class ServerProtocols {
 
     // Handshake JSONObjects
     public static final class Handshake {
-        public static @NotNull JSONObject getPasswordAlgorithm() {
-            JSONObject json = new JSONObject();
-            json.put("password_algorithm", "SHA512");
-            return json;
-        }
         public static @NotNull JSONObject getResponseServerFull() {
             JSONObject json = new JSONObject();
             json.put("reject", ServerRejectReason.LOBBY_FULL.name());
@@ -69,8 +67,17 @@ public final class ServerProtocols {
             json.put("left", uuid);
             return json;
         }
-        public static @NotNull JSONObject getLobbyPlayersList(@NotNull final List<@NotNull PlayerLobbyInfo> playerLobbyInfos) { // TODO
+        public static @NotNull JSONObject getLobbyPlayersList(@NotNull final List<@NotNull ServerPlayerData> playersData) {
             JSONObject json = new JSONObject();
+            JSONArray playersArray = new JSONArray();
+            for (ServerPlayerData playerData : playersData) {
+                JSONObject player = new JSONObject();
+                player.put("player", playerData.getUuid());
+                player.put("username", playerData.getUsername());
+                player.put("ready", playerData.isReady());
+                playersArray.put(player);
+            }
+            json.put("players", playersArray);
             return json;
         }
         public static @NotNull JSONObject getLobbyPlayerReadyChange(@NotNull final String uuid, boolean ready) {
@@ -93,15 +100,32 @@ public final class ServerProtocols {
             json.put("blackcard", jsonCard);
             return json;
         }
+        public static @NotNull JSONObject getSendChoicesToMaster(@NotNull final ArrayList<@NotNull ServerPlayerData> serverPlayersData) {
+            JSONObject json = new JSONObject();
+            JSONArray playersChoicesArray = new JSONArray();
+            for (ServerPlayerData playerData : serverPlayersData) {
+                JSONObject combination = new JSONObject();
+                combination.put("player", playerData.getUuid());
+                JSONArray combinationArray = new JSONArray();
+                for (WhiteCardChoice choice : playerData.getWhiteCardChoices()) {
+                    JSONObject choiceJSON = new JSONObject();
+                    choiceJSON.put("order_index", choice.orderIndex());
+                    choiceJSON.put("content", choice.whiteCard().isWildcard() ? choice.wildcardContent() : choice.whiteCard().getContent());
+                    combinationArray.put(choiceJSON);
+                }
+                combination.put("combination", combinationArray);
+            }
+            json.put("players_choices", playersChoicesArray);
+            return json;
+        }
         public static @NotNull JSONObject getPlayerLeft(@NotNull final String playerUuid, boolean cardMaster) {
             JSONObject json = new JSONObject();
             json.put("left", playerUuid);
             json.put("card_master", cardMaster);
             return json;
         }
-        public static @NotNull JSONObject getGivePlayerWhitecards(@NotNull final String playerUuid, WhiteCard... whiteCards) {
+        public static @NotNull JSONObject getGivePlayerWhitecards(@NotNull final ArrayList<@NotNull WhiteCard> whiteCards) {
             JSONObject json = new JSONObject();
-            json.put("player", playerUuid);
             JSONArray cards = new JSONArray();
             for (WhiteCard whiteCard : whiteCards) {
                 JSONObject jsonCard = new JSONObject();
@@ -113,8 +137,30 @@ public final class ServerProtocols {
             json.put("whitecards", cards);
             return json;
         }
-        public static @NotNull JSONObject getAnnounceWinner() { // TODO
+        public static @NotNull JSONObject getAnnounceWinner(@Nullable final String winnerUuid, @Nullable final ArrayList<@NotNull WhiteCardChoice> winningChoices, @NotNull final ArrayList<ServerPlayerData> playersData) {
             JSONObject json = new JSONObject();
+            json.put("winner", winnerUuid);
+            if (winnerUuid != null && winningChoices != null) {
+                JSONArray winningChoicesArray = new JSONArray();
+                for (WhiteCardChoice choice : winningChoices) {
+                    if (choice.whiteCard().isWildcard()) winningChoicesArray.put(choice.wildcardContent());
+                    else winningChoicesArray.put(choice.whiteCard().getContent());
+                }
+                json.put("winning_choices", winningChoicesArray);
+            }
+            JSONArray allChoicesArray = new JSONArray();
+            for (ServerPlayerData playerData : playersData) {
+                JSONObject player = new JSONObject();
+                player.put("player", playerData.getUuid());
+                JSONArray playerChoices = new JSONArray();
+                for (WhiteCardChoice choice : playerData.getWhiteCardChoices()) {
+                    if (choice.whiteCard().isWildcard()) playerChoices.put(choice.wildcardContent());
+                    else playerChoices.put(choice.whiteCard().getContent());
+                }
+                player.put("choices", playerChoices);
+                allChoicesArray.put(player);
+            }
+            json.put("player_choices", allChoicesArray);
             return json;
         }
     }

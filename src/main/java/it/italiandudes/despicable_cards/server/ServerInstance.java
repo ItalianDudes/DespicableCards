@@ -67,7 +67,7 @@ public final class ServerInstance {
         }
     }
     private void loadCardsFromDB(@NotNull final ArrayList<@NotNull WhiteCard> whiteCards, @NotNull final ArrayList<@NotNull BlackCard> blackCards) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
-        File targetDir = new File(Defs.JAR_POSITION + File.separator + Defs.DBS_DIRECTORY_NAME);
+        File targetDir = new File(new File(Defs.JAR_POSITION).getParent() + File.separator + Defs.DBS_DIRECTORY_NAME);
         if (!targetDir.exists() || !targetDir.isDirectory()) targetDir.mkdir();
         File[] dbs = targetDir.listFiles((dir, name) -> name.endsWith(Defs.DB_EXTENSION));
         if (dbs == null) throw new IOException("DB dir path \"" + targetDir.getAbsolutePath() + "\" is not a directory IO Exception has occurred while accessing directory");

@@ -36,6 +36,26 @@ public final class ServerPlayerHandshakeThread extends Thread {
         try {
             JSONObject request = JSONSerializer.readJSONObject(socket.getInputStream());
             String username = request.getString("username");
+            if (username.trim().isBlank()) { // Invalid Username Check
+                JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getResponseInvalidUsername());
+                socket.close();
+                return;
+            }
+            if (ServerInstance.getInstance().getAvailableSpace() <= 0) { // Max Players Check
+                JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getResponseServerFull());
+                socket.close();
+                return;
+            }
+            if (ServerInstance.getInstance().getServerStateThread() instanceof ServerGameThread) { // Not in Lobby Check
+                JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getResponseNotInLobby());
+                socket.close();
+                return;
+            }
+            if (ServerInstance.getInstance().getServerPlayerDataManager().getPlayerDataWithUsername(username) != null) { // Username Taken Check
+                JSONSerializer.writeJSONObject(socket.getOutputStream(), ServerProtocols.Handshake.getResponseUsernameTaken());
+                socket.close();
+                return;
+            }
             if (ServerInstance.getInstance().getSha512password() != null) { // Password Check
                 if (request.has("server_password")) {
                     String serverPassword = request.getString("server_password");
@@ -50,12 +70,6 @@ public final class ServerPlayerHandshakeThread extends Thread {
                     return;
                 }
             }
-
-            /* TODO: Rejects not implemented yet
-            * 1  Lobby Full
-            * 2  Username Taken
-            * 3  Not In Lobby
-            * */
 
             // Accepting new player
             String playerUuid = UUID.randomUUID().toString();

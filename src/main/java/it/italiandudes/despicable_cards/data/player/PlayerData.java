@@ -52,7 +52,6 @@ public class PlayerData {
     @Override
     public final boolean equals(Object o) {
         if (!(o instanceof PlayerData that)) return false;
-
         return getUuid().equals(that.getUuid());
     }
     @Override

@@ -46,5 +46,10 @@ public final class ClientProtocols {
             json.put("choices", choicesArray);
             return json;
         }
+        public static @NotNull JSONObject getMasterSendWinnerChoice(@NotNull final String winnerUuid) {
+            JSONObject json = new JSONObject();
+            json.put("winner", winnerUuid);
+            return json;
+        }
     }
 }

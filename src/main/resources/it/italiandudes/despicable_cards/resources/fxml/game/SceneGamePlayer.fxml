@@ -71,7 +71,7 @@
                     </rowConstraints>
                      <children>
                         <ListView fx:id="listViewWhitecards" style="-fx-font-size: 24px;" GridPane.rowIndex="1" />
-                        <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <GridPane vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <columnConstraints>
                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
                            </columnConstraints>
@@ -80,20 +80,20 @@
                               <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Button fx:id="buttonRemoveFromChoices" mnemonicParsing="false" onAction="#removeFromChoices">
+                              <Button fx:id="buttonAddToChoices" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addToChoices">
                                  <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../../../../../../../ApexRandomizer/src/main/resources/it/italiandudes/apexrandomizer/resources/image/arrow-right.png" />
+                                          <Image url="@../../image/arrow-right.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="buttonAddToChoices" mnemonicParsing="false" onAction="#addToChoices" GridPane.rowIndex="1">
+                              <Button fx:id="buttonRemoveFromChoices" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeFromChoices" GridPane.rowIndex="1">
                                  <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                                        <image>
-                                          <Image url="@../../../../../../../../../../ApexRandomizer/src/main/resources/it/italiandudes/apexrandomizer/resources/image/arrow-right.png" />
+                                          <Image url="@../../image/arrow-right.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -106,7 +106,7 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </TextArea>
-                        <GridPane GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <GridPane vgap="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <columnConstraints>
                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
                            </columnConstraints>
@@ -115,20 +115,20 @@
                               <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Button fx:id="buttonMoveUp" mnemonicParsing="false" onAction="#moveUp">
+                              <Button fx:id="buttonMoveUp" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveUp">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
                                        <image>
-                                          <Image url="@../../../../../../../../../../ApexRandomizer/src/main/resources/it/italiandudes/apexrandomizer/resources/image/arrow-right.png" />
+                                          <Image url="@../../image/arrow-right.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="buttonMoveDown" mnemonicParsing="false" onAction="#moveDown" GridPane.rowIndex="1">
+                              <Button fx:id="buttonMoveDown" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveDown" GridPane.rowIndex="1">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                        <image>
-                                          <Image url="@../../../../../../../../../../ApexRandomizer/src/main/resources/it/italiandudes/apexrandomizer/resources/image/arrow-right.png" />
+                                          <Image url="@../../image/arrow-right.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

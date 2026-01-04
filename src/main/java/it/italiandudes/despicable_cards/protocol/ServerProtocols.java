@@ -100,10 +100,11 @@ public final class ServerProtocols {
             json.put("blackcard", jsonCard);
             return json;
         }
-        public static @NotNull JSONObject getSendChoicesToMaster(@NotNull final ArrayList<@NotNull ServerPlayerData> serverPlayersData) {
+        public static @NotNull JSONObject getSendChoicesToMaster(@NotNull final ArrayList<@NotNull ServerPlayerData> serverPlayersData, @NotNull final ServerPlayerData masterPlayerData) {
             JSONObject json = new JSONObject();
             JSONArray playersChoicesArray = new JSONArray();
             for (ServerPlayerData playerData : serverPlayersData) {
+                if (playerData.equals(masterPlayerData)) continue;
                 JSONObject combination = new JSONObject();
                 combination.put("player", playerData.getUuid());
                 JSONArray combinationArray = new JSONArray();
@@ -117,6 +118,7 @@ public final class ServerProtocols {
                     combinationArray.put(choiceJSON);
                 }
                 combination.put("combination", combinationArray);
+                playersChoicesArray.put(combination);
             }
             json.put("players_choices", playersChoicesArray);
             return json;
@@ -140,11 +142,12 @@ public final class ServerProtocols {
             json.put("whitecards", cards);
             return json;
         }
-        public static @NotNull JSONObject getAnnounceWinner(@Nullable final String winnerUuid, @NotNull final ArrayList<ServerPlayerData> serverPlayersData) {
+        public static @NotNull JSONObject getAnnounceWinner(@Nullable final String winnerUuid, @NotNull final ArrayList<ServerPlayerData> serverPlayersData, @NotNull final ServerPlayerData masterPlayerData) {
             JSONObject json = new JSONObject();
             json.put("winner", winnerUuid);
             JSONArray playersChoicesArray = new JSONArray();
             for (ServerPlayerData playerData : serverPlayersData) {
+                if (playerData.equals(masterPlayerData)) continue;
                 JSONObject combination = new JSONObject();
                 combination.put("player", playerData.getUuid());
                 JSONArray combinationArray = new JSONArray();
@@ -158,6 +161,7 @@ public final class ServerProtocols {
                     combinationArray.put(choiceJSON);
                 }
                 combination.put("combination", combinationArray);
+                playersChoicesArray.put(combination);
             }
             json.put("players_choices", playersChoicesArray);
             return json;

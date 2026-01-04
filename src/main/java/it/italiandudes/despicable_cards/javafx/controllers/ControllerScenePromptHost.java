@@ -91,13 +91,22 @@ public final class ControllerScenePromptHost {
                 ServerInstance.newInstance(port, maxPlayers, finalPassword);
             } catch (IOException e) {
                 Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
-                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Errore di IO", "Si e' verificato un errore durante l'accesso alla cartella dei pacchetti carte."));
+                Platform.runLater(() -> {
+                    new ErrorAlert(Client.getStage(), "ERRORE", "Errore di IO", "Si e' verificato un errore durante l'accesso alla cartella dei pacchetti carte.");
+                    enableAll();
+                });
             } catch (NotEnoughWhitecardsException e) {
                 Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
-                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Carte Bianche Insufficienti", "Le carte bianche caricate non sono sufficienti (MIN " + Defs.MIN_WHITECARDS_LOADED + ")."));
+                Platform.runLater(() -> {
+                    new ErrorAlert(Client.getStage(), "ERRORE", "Carte Bianche Insufficienti", "Le carte bianche caricate non sono sufficienti (MIN " + Defs.MIN_WHITECARDS_LOADED + ").");
+                    enableAll();
+                });
             } catch (NotEnoughBlackcardsException e) {
                 Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
-                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Carte Nere Insufficienti", "Le carte nere caricate non sono sufficienti (MIN " + Defs.MIN_BLACKCARDS_LOADED + ")."));
+                Platform.runLater(() -> {
+                    new ErrorAlert(Client.getStage(), "ERRORE", "Carte Nere Insufficienti", "Le carte nere caricate non sono sufficienti (MIN " + Defs.MIN_BLACKCARDS_LOADED + ").");
+                    enableAll();
+                });
             }
             Socket socket = null;
             try {
@@ -118,7 +127,10 @@ public final class ControllerScenePromptHost {
                     if (socket != null) socket.close();
                 } catch (Exception ignored) {}
                 ServerInstance.stopInstance();
-                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Errore di Rete", "Si e' verificato un errore di rete durante la connessione al server locale."));
+                Platform.runLater(() -> {
+                    new ErrorAlert(Client.getStage(), "ERRORE", "Errore di Rete", "Si e' verificato un errore di rete durante la connessione al server locale.");
+                    enableAll();
+                });
             }
         });
     }

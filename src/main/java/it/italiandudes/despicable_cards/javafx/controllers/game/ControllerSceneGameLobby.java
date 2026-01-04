@@ -1,11 +1,14 @@
 package it.italiandudes.despicable_cards.javafx.controllers.game;
 
+import it.italiandudes.despicable_cards.data.card.BlackCard;
 import it.italiandudes.despicable_cards.data.player.PlayerData;
 import it.italiandudes.despicable_cards.data.player.PlayerDataManager;
 import it.italiandudes.despicable_cards.features.DiscordRichPresenceManager;
 import it.italiandudes.despicable_cards.javafx.Client;
 import it.italiandudes.despicable_cards.javafx.JFXDefs;
 import it.italiandudes.despicable_cards.javafx.scene.SceneMainMenu;
+import it.italiandudes.despicable_cards.javafx.scene.game.SceneGameMaster;
+import it.italiandudes.despicable_cards.javafx.scene.game.SceneGamePlayer;
 import it.italiandudes.despicable_cards.protocol.ClientProtocols;
 import it.italiandudes.despicable_cards.protocol.SharedProtocols;
 import it.italiandudes.despicable_cards.server.ServerInstance;
@@ -24,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.Socket;
 
 public final class ControllerSceneGameLobby {
@@ -48,7 +50,7 @@ public final class ControllerSceneGameLobby {
     }
 
     // Graphic Elements
-    @FXML private Label labelLobbyName;
+    @FXML private Label labelLobbyName; // TODO
     @FXML private ListView<PlayerData> listViewPlayersList;
     @FXML private ToggleButton toggleButtonSwitchReady;
 
@@ -76,15 +78,6 @@ public final class ControllerSceneGameLobby {
         JFXDefs.startServiceTask(() -> {
             while (!configurationComplete) Thread.onSpinWait();
             JFXDefs.startServiceTask(this::lobbyListener);
-            /*
-            try {
-                JSONObject lobbyList = JSONSerializer.readJSONObject(serverSocket.getInputStream());
-                populateList(lobbyList);
-
-            } catch (Exception e) {
-                Logger.log(e, Defs.LOGGER_CONTEXT);
-                closeConnection();
-            }*/
         });
     }
 
@@ -123,7 +116,6 @@ public final class ControllerSceneGameLobby {
             boolean stopLoop = false;
             while (!stopLoop && !connectionToServer.isClosed()) {
                 JSONObject message = JSONSerializer.readJSONObject(connectionToServer.getInputStream());
-                System.err.println(message);
 
                 if (message.has("alive_request")) {
                     long timestamp = message.getLong("alive_request");
@@ -151,6 +143,15 @@ public final class ControllerSceneGameLobby {
                     switch (state) {
                         case "game" -> {
                             stopLoop = true;
+                            JSONObject announcedRound = JSONSerializer.readJSONObject(connectionToServer.getInputStream());
+                            PlayerData masterPlayerData = playersDataManager.getPlayerDataWithUUID(announcedRound.getString("master"));
+                            if (masterPlayerData == null) throw new RuntimeException("Master not in PlayerManager");
+                            JSONObject blackcardJSON = announcedRound.getJSONObject("blackcard");
+                            BlackCard blackCard = new BlackCard(blackcardJSON.getString("card_id"), blackcardJSON.getString("content"), blackcardJSON.getInt("blanks"));
+                            Platform.runLater(() -> {
+                                if (playerData.equals(masterPlayerData)) Client.setScene(SceneGameMaster.getScene(playerData, blackCard, playersDataManager, connectionToServer));
+                                else Client.setScene(SceneGamePlayer.getScene(masterPlayerData, playerData, blackCard, playersDataManager, connectionToServer));
+                            });
                         } // OPEN GAME SCENE
                         case "lobby" -> {} // Ignore
                         case "close" -> {
@@ -178,7 +179,7 @@ public final class ControllerSceneGameLobby {
             try {
                 JSONSerializer.writeJSONObject(connectionToServer.getOutputStream(), ClientProtocols.Lobby.getLobbyReady(ready));
                 Platform.runLater(() -> toggleButtonSwitchReady.setDisable(false));
-            } catch (IOException e) {
+            } catch (Throwable e) {
                 Logger.log(e, Defs.LOGGER_CONTEXT);
                 closeConnection();
             }

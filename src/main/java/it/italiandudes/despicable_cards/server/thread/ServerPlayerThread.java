@@ -82,8 +82,9 @@ public final class ServerPlayerThread extends Thread {
                     if (serverPlayerData.equals(winnerData)) winnerData = null;
                     ServerInstance.getInstance().broadcastMessage(ServerProtocols.Game.getAnnounceWinner(
                             winnerData != null ? winnerData.getUuid() : null,
-                            ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData())
-                    );
+                            ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData(),
+                            gameThread.getMasterPlayerData()
+                    ));
                     gameThread.winnerAnnounced();
                 }
             }

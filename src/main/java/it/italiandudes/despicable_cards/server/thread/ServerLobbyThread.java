@@ -29,9 +29,10 @@ public final class ServerLobbyThread extends Thread {
     @Override
     public void run() {
         try {
+            ServerInstance.getInstance().broadcastMessage(ServerProtocols.Lobby.getLobbyPlayersList(ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()));
             while (!isInterrupted()) {
                 //noinspection BusyWait
-                // Thread.sleep(2000);
+                Thread.sleep(1000);
                 if (everyoneReady()) {
                     ServerInstance.getInstance().broadcastMessage(ServerProtocols.State.getStateGame());
                     ServerGameThread gameThread = new ServerGameThread();
@@ -39,6 +40,7 @@ public final class ServerLobbyThread extends Thread {
                     return;
                 }
             }
+        } catch (InterruptedException ignored) {
         } catch (Exception e) {
             Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
             ServerInstance.stopInstance();

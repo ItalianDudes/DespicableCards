@@ -36,6 +36,7 @@ public final class ServerGameThread extends Thread {
     // Methods
     private boolean everyoneSentChoices() {
         for (ServerPlayerData playerData : ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()) {
+            if (playerData.equals(masterPlayerData)) continue;
             if (playerData.getWhiteCardChoices().isEmpty()) return false;
         }
         return true;
@@ -100,7 +101,7 @@ public final class ServerGameThread extends Thread {
             }
 
             // 7. Send choices to master
-            JSONSerializer.writeJSONObject(masterPlayerData.getSocket().getOutputStream(), ServerProtocols.Game.getSendChoicesToMaster(ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()));
+            JSONSerializer.writeJSONObject(masterPlayerData.getSocket().getOutputStream(), ServerProtocols.Game.getSendChoicesToMaster(ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData(), masterPlayerData));
 
             // 8. Wait for winner announce from Master ServerPlayerThread
             while (!winnerAnnounced) Thread.onSpinWait();
@@ -113,7 +114,9 @@ public final class ServerGameThread extends Thread {
             }
 
             // 10. TEMPORARY: BACK TO LOBBY | NO NEW ROUND
+            ServerInstance.getInstance().getServerPlayerDataManager().resetReadyStateForPlayers();
             ServerInstance.getInstance().broadcastMessage(ServerProtocols.State.getStateLobby());
+            ServerInstance.getInstance().changeServerStateThread(new ServerLobbyThread());
         } catch (Exception e) {
             Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
             ServerInstance.stopInstance();

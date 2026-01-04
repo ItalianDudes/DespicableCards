@@ -1,12 +1,11 @@
 package it.italiandudes.despicable_cards.data.card;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class WhiteCard extends Group {
+public class WhiteCard /*extends Group*/ {
 
     // Attributes
     @NotNull private final Rectangle card;

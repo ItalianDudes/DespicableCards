@@ -24,6 +24,11 @@ public final class ServerPlayerDataManager {
         }
         return null;
     }
+    public void resetReadyStateForPlayers() {
+        for (ServerPlayerData serverPlayerData : serverPlayersData) {
+            serverPlayerData.setReady(false);
+        }
+    }
     public void resetAllPlayersWhitecards() {
         for (ServerPlayerData playerData : serverPlayersData) {
             playerData.getWhiteCards().clear();

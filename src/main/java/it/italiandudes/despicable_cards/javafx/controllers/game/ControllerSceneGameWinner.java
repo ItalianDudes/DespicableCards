@@ -10,6 +10,8 @@ import it.italiandudes.despicable_cards.javafx.Client;
 import it.italiandudes.despicable_cards.javafx.JFXDefs;
 import it.italiandudes.despicable_cards.javafx.scene.SceneMainMenu;
 import it.italiandudes.despicable_cards.javafx.scene.game.SceneGameLobby;
+import it.italiandudes.despicable_cards.javafx.scene.game.SceneGameMaster;
+import it.italiandudes.despicable_cards.javafx.scene.game.SceneGamePlayer;
 import it.italiandudes.despicable_cards.protocol.SharedProtocols;
 import it.italiandudes.despicable_cards.server.ServerInstance;
 import it.italiandudes.despicable_cards.utils.Defs;
@@ -36,6 +38,7 @@ public final class ControllerSceneGameWinner {
     private PlayerData winnerPlayerData;
     private PlayerDataManager playersDataManager;
     private ArrayList<WhiteCardsChoiceCollection> playersChoices;
+    private String nextState = null;
     private volatile boolean configurationComplete = false;
 
     // Attributes Methods
@@ -67,7 +70,7 @@ public final class ControllerSceneGameWinner {
     @FXML private ListView<WhiteCardsChoiceCollection> listViewChoices;
     @FXML private ListView<WhiteCardChoice> listViewChoiceWhitecards;
     @FXML private TextArea textAreaWhitecard;
-    @FXML private Button buttonBackToLobby;
+    @FXML private Button buttonNext;
 
     // Initialize
     @FXML
@@ -94,16 +97,18 @@ public final class ControllerSceneGameWinner {
             else textAreaWhitecard.clear();
         });
         JFXDefs.startServiceTask(() -> {
-            while (!configurationComplete) Thread.onSpinWait();
-            labelWinner.setText(winnerPlayerData.getUsername());
-            textAreaBlackcard.setText(blackCard.getContent());
-            listViewChoices.setItems(FXCollections.observableList(playersChoices));
             try {
-                JSONObject lobbyState = JSONSerializer.readJSONObject(connectionToServer.getInputStream()); // TODO: TEMPORARY!!!!!!
+                JSONObject nextState = JSONSerializer.readJSONObject(connectionToServer.getInputStream());
+                this.nextState = nextState.getString("state");
             } catch (Exception e) {
                 Logger.log(e);
                 closeConnection();
             }
+            while (!configurationComplete) Thread.onSpinWait();
+            labelWinner.setText(winnerPlayerData.getUsername());
+            textAreaBlackcard.setText(blackCard.getContent());
+            listViewChoices.setItems(FXCollections.observableList(playersChoices));
+            Platform.runLater(() -> buttonNext.setDisable(false));
         });
     }
 
@@ -127,7 +132,27 @@ public final class ControllerSceneGameWinner {
 
     // EDT
     @FXML
-    private void backToLobby() {
-        Client.setScene(SceneGameLobby.getScene(playerData, connectionToServer));
+    private void next() {
+        switch (nextState) {
+            case "game" -> {
+                try {
+                    JSONObject announcedRound = JSONSerializer.readJSONObject(connectionToServer.getInputStream());
+                    PlayerData masterPlayerData = playersDataManager.getPlayerDataWithUUID(announcedRound.getString("master"));
+                    if (masterPlayerData == null) throw new RuntimeException("Master not in PlayerManager");
+                    JSONObject blackcardJSON = announcedRound.getJSONObject("blackcard");
+                    BlackCard blackCard = new BlackCard(blackcardJSON.getString("card_id"), blackcardJSON.getString("content"), blackcardJSON.getInt("blanks"));
+                    Platform.runLater(() -> {
+                        if (playerData.equals(masterPlayerData)) Client.setScene(SceneGameMaster.getScene(playerData, blackCard, playersDataManager, connectionToServer));
+                        else Client.setScene(SceneGamePlayer.getScene(masterPlayerData, playerData, blackCard, playersDataManager, connectionToServer));
+                    });
+                } catch (Exception e) {
+                    Logger.log(e);
+                    closeConnection();
+                }
+            }
+            case "lobby" -> Client.setScene(SceneGameLobby.getScene(playerData, connectionToServer));
+            default -> closeConnection();
+        }
+
     }
 }

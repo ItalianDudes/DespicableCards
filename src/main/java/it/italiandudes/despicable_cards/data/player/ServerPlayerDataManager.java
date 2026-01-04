@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public final class ServerPlayerDataManager {
 
@@ -23,6 +24,9 @@ public final class ServerPlayerDataManager {
             if (playerData.getUuid().equals(uuid)) return playerData;
         }
         return null;
+    }
+    public synchronized void shuffleServerPlayersData() {
+        Collections.shuffle(serverPlayersData);
     }
     public void resetReadyStateForPlayers() {
         for (ServerPlayerData serverPlayerData : serverPlayersData) {

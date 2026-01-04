@@ -96,7 +96,7 @@
                         </Label>
                      </children>
                   </GridPane>
-                  <Button fx:id="buttonBackToLobby" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#backToLobby" text="TORNA ALLA LOBBY" GridPane.rowIndex="4">
+                  <Button fx:id="buttonNext" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#next" text="AVANTI" GridPane.rowIndex="4">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>

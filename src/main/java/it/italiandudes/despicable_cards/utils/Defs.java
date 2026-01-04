@@ -48,6 +48,7 @@ public final class Defs {
     public static final int MAX_WHITECARDS = 10;
     public static final int MIN_PLAYER_LIMIT = 3;
     public static final int MAX_PLAYERS_LIMIT = 10;
+    public static final int MAX_ROUNDS_LIMIT = 100;
 
     // JSON Settings
     public static final class SettingsKeys {

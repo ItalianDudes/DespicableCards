@@ -85,6 +85,7 @@ public final class ServerPlayerThread extends Thread {
                             ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData(),
                             gameThread.getMasterPlayerData()
                     ));
+                    gameThread.setWinner(winnerData);
                     gameThread.winnerAnnounced();
                 }
             }

@@ -13,6 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <!--suppress JavaFxDefaultTag -->
+
 <AnchorPane xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.italiandudes.despicable_cards.javafx.controllers.ControllerScenePromptHost">
    <children>
       <GridPane vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -31,6 +32,7 @@
             <GridPane hgap="10.0" GridPane.rowIndex="2">
               <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
               </columnConstraints>
               <rowConstraints>
@@ -43,12 +45,18 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label text="Porta" GridPane.columnIndex="1">
+                  <Label text="Numero di Round" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label text="Porta" GridPane.columnIndex="2">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
                   <Spinner fx:id="spinnerMaxPlayers" maxHeight="1.7976931348623157E308" GridPane.rowIndex="1" />
-                  <Spinner fx:id="spinnerPort" editable="true" maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Spinner fx:id="spinnerMaxRounds" maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Spinner fx:id="spinnerPort" editable="true" maxHeight="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <GridPane hgap="10.0" GridPane.rowIndex="3">

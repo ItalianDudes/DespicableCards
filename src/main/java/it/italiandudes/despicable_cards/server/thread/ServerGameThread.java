@@ -18,19 +18,20 @@ public final class ServerGameThread extends Thread {
     // Attributes
     @NotNull private final ServerPlayerData masterPlayerData;
     @NotNull private final BlackCard blackCard;
-    private final boolean firstRound;
+    private final int roundNumber;
+    private ServerPlayerData winnerPlayerData = null;
     private volatile boolean winnerAnnounced = false;
 
     // Constructors
-    public ServerGameThread(@Nullable final ServerPlayerData masterPlayerData, boolean firstRound) {
-        this.firstRound = firstRound;
+    public ServerGameThread(@Nullable final ServerPlayerData masterPlayerData, int roundNumber) {
+        this.roundNumber = roundNumber;
         this.masterPlayerData = Objects.requireNonNullElseGet(masterPlayerData, () -> ServerInstance.getInstance().getServerPlayerDataManager().randomizeServerPlayerData());
         this.blackCard = ServerInstance.getInstance().getBlackcardsPool().getRandomBlackcard();
         setDaemon(true);
         setName("ServerGameThread");
     }
     public ServerGameThread() {
-        this(null, true);
+        this(null, 1);
     }
 
     // Methods
@@ -40,6 +41,9 @@ public final class ServerGameThread extends Thread {
             if (playerData.getWhiteCardChoices().isEmpty()) return false;
         }
         return true;
+    }
+    public void setWinner(@Nullable final ServerPlayerData winnerPlayerData) {
+        this.winnerPlayerData = winnerPlayerData;
     }
     public @NotNull ServerPlayerData getMasterPlayerData() {
         return masterPlayerData;
@@ -68,8 +72,11 @@ public final class ServerGameThread extends Thread {
 
         try {
 
+            // Shuffle Players Data
+            ServerInstance.getInstance().getServerPlayerDataManager().shuffleServerPlayersData();
+
             // 1. Reset pools and player whitecards if it's the first round
-            if (firstRound) {
+            if (roundNumber == 1) {
                 ServerInstance.getInstance().getServerPlayerDataManager().resetAllPlayersWhitecards();
                 ServerInstance.getInstance().getWhitecardsPool().resetPool();
                 ServerInstance.getInstance().getBlackcardsPool().resetPool();
@@ -82,7 +89,7 @@ public final class ServerGameThread extends Thread {
             ServerInstance.getInstance().broadcastMessage(ServerProtocols.Game.getAnnounceRound(masterPlayerData.getUuid(), blackCard));
 
             // 4. If first round, fully randomize whitecards
-            if (firstRound) {
+            if (roundNumber == 1) {
                 for (ServerPlayerData playerData : ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()) {
                     playerData.setWhiteCards(ServerInstance.getInstance().getWhitecardsPool().getRandomWhitecardsAmount(Defs.MAX_WHITECARDS));
                 }
@@ -113,10 +120,15 @@ public final class ServerGameThread extends Thread {
                 playerData.getWhiteCards().addAll(ServerInstance.getInstance().getWhitecardsPool().getRandomWhitecardsAmount(Defs.MAX_WHITECARDS - playerData.getWhiteCards().size()));
             }
 
-            // 10. TEMPORARY: BACK TO LOBBY | NO NEW ROUND
-            ServerInstance.getInstance().getServerPlayerDataManager().resetReadyStateForPlayers();
-            ServerInstance.getInstance().broadcastMessage(ServerProtocols.State.getStateLobby());
-            ServerInstance.getInstance().changeServerStateThread(new ServerLobbyThread());
+            // 10. Next Round or Go to Lobby
+            if (roundNumber < ServerInstance.getInstance().getMaxRounds()) { // Next Round
+                ServerInstance.getInstance().broadcastMessage(ServerProtocols.State.getStateGame());
+                ServerInstance.getInstance().changeServerStateThread(new ServerGameThread(winnerPlayerData, roundNumber+1));
+            } else { // Lobby
+                ServerInstance.getInstance().getServerPlayerDataManager().resetReadyStateForPlayers();
+                ServerInstance.getInstance().broadcastMessage(ServerProtocols.State.getStateLobby());
+                ServerInstance.getInstance().changeServerStateThread(new ServerLobbyThread());
+            }
         } catch (Exception e) {
             Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
             ServerInstance.stopInstance();

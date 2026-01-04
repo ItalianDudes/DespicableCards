@@ -31,6 +31,7 @@ public final class ControllerScenePromptHost {
     @FXML private TextField textFieldUsername;
     @FXML private TextField passwordFieldServerPassword;
     @FXML private Spinner<Integer> spinnerMaxPlayers;
+    @FXML private Spinner<Integer> spinnerMaxRounds;
     @FXML private Spinner<Integer> spinnerPort;
     @FXML private Button buttonBack;
     @FXML private Button buttonCreateLobby;
@@ -39,6 +40,7 @@ public final class ControllerScenePromptHost {
     @FXML
     private void initialize() {
         spinnerMaxPlayers.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Defs.MIN_PLAYER_LIMIT, Defs.MAX_PLAYERS_LIMIT));
+        spinnerMaxRounds.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Defs.MAX_ROUNDS_LIMIT));
         spinnerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65535, 45000, 1));
         spinnerPort.getEditor().setTextFormatter(UIElementConfigurator.configureNewIntegerTextFormatter());
     }
@@ -49,6 +51,7 @@ public final class ControllerScenePromptHost {
         passwordFieldServerPassword.setDisable(true);
         spinnerMaxPlayers.setDisable(true);
         spinnerPort.setDisable(true);
+        spinnerMaxRounds.setDisable(true);
         buttonBack.setDisable(true);
         buttonCreateLobby.setDisable(true);
     }
@@ -57,6 +60,7 @@ public final class ControllerScenePromptHost {
         passwordFieldServerPassword.setDisable(false);
         spinnerMaxPlayers.setDisable(false);
         spinnerPort.setDisable(false);
+        spinnerMaxRounds.setDisable(false);
         buttonBack.setDisable(false);
         buttonCreateLobby.setDisable(false);
     }
@@ -72,6 +76,7 @@ public final class ControllerScenePromptHost {
             return;
         }
         int maxPlayers = spinnerMaxPlayers.getValue();
+        int maxRounds = spinnerMaxRounds.getValue();
         String password = passwordFieldServerPassword.getText();
         if (password.trim().isBlank()) password = null;
         if (password != null) password = DigestUtils.sha512Hex(password);
@@ -88,7 +93,7 @@ public final class ControllerScenePromptHost {
         String finalPassword = password;
         JFXUtils.startVoidServiceTask(() -> {
             try {
-                ServerInstance.newInstance(port, maxPlayers, finalPassword);
+                ServerInstance.newInstance(port, maxPlayers, maxRounds, finalPassword);
             } catch (IOException e) {
                 Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
                 Platform.runLater(() -> {

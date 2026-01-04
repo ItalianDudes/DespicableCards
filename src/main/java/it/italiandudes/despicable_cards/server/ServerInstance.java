@@ -36,6 +36,7 @@ public final class ServerInstance {
     @Nullable private final String sha512password;
     private final int port;
     private final int maxPlayers;
+    private final int maxRounds;
     @NotNull private final ServerListenerThread listener;
     @NotNull private final ServerPlayerDataManager serverPlayerDataManager = new ServerPlayerDataManager();
     @NotNull private Thread serverStateThread;
@@ -43,10 +44,11 @@ public final class ServerInstance {
     @NotNull private final BlackcardsPool blackcardsPool;
 
     // Constructors
-    private ServerInstance(final int port, final int maxPlayers, @Nullable final String password) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
+    private ServerInstance(final int port, final int maxPlayers, final int maxRounds, @Nullable final String password) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
         this.port = port;
         if (maxPlayers >= Defs.MIN_PLAYER_LIMIT && maxPlayers <= Defs.MAX_PLAYERS_LIMIT) this.maxPlayers = maxPlayers;
         else this.maxPlayers = Defs.MAX_PLAYERS_LIMIT;
+        this.maxRounds = Math.min(Math.max(maxRounds, 1), Defs.MAX_ROUNDS_LIMIT);
         if (password == null) this.sha512password = null;
         else this.sha512password = DigestUtils.sha512Hex(password);
         ArrayList<WhiteCard> whiteCards = new ArrayList<>();
@@ -142,6 +144,9 @@ public final class ServerInstance {
     public int getAvailableSpace() {
         return Math.max(0, getMaxPlayers() - getCurrentPlayers());
     }
+    public int getMaxRounds() {
+        return maxRounds;
+    }
     public int getMaxPlayers() {
         return maxPlayers;
     }
@@ -194,11 +199,11 @@ public final class ServerInstance {
         INSTANCE.serverStateThread.interrupt();
         INSTANCE = null;
     }
-    public static void newInstance(int port, int maxPlayers, @Nullable final String password) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
+    public static void newInstance(int port, int maxPlayers, int maxRounds, @Nullable final String password) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
         if (INSTANCE != null) {
             throw new RuntimeException("Can't create a new ServerInstance while there is already one active.");
         }
-        INSTANCE = new ServerInstance(port, maxPlayers, password);
+        INSTANCE = new ServerInstance(port, maxPlayers, maxRounds, password);
     }
     public static ServerInstance getInstance() {
         return INSTANCE;

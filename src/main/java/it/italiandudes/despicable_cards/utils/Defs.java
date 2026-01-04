@@ -24,7 +24,7 @@ public final class Defs {
     public static final String SERVER_LOGGER_CONTEXT = "Server";
 
     // DB Version
-    public static final String DB_VERSION = "0.0";
+    public static final String DB_VERSION = "1.0";
 
     // Jar App Position
     public static final String JAR_POSITION;

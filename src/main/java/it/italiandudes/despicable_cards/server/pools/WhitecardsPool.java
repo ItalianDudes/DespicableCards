@@ -3,8 +3,10 @@ package it.italiandudes.despicable_cards.server.pools;
 import it.italiandudes.despicable_cards.data.card.WhiteCard;
 import it.italiandudes.despicable_cards.utils.Randomizer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public final class WhitecardsPool {
 
@@ -21,6 +23,12 @@ public final class WhitecardsPool {
     public void resetPool() {
         availableWhitecards.addAll(usedWhitecards);
         usedWhitecards.clear();
+    }
+    public @Nullable WhiteCard getWhitecardFromUUID(@NotNull final String uuid) {
+        Optional<WhiteCard> availableOpt = availableWhitecards.stream().filter(card -> card.getUuid().equals(uuid)).findFirst();
+        if (availableOpt.isPresent()) return availableOpt.get();
+        Optional<WhiteCard> usedOpt = usedWhitecards.stream().filter(card -> card.getUuid().equals(uuid)).findFirst();
+        return usedOpt.orElse(null);
     }
     public @NotNull ArrayList<@NotNull WhiteCard> getRandomWhitecardsAmount(final int amount) {
         if (availableWhitecards.size() < amount) resetPool();

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 public final class WhitecardsPool {
@@ -17,6 +18,7 @@ public final class WhitecardsPool {
     // Constructors
     public WhitecardsPool(@NotNull final ArrayList<@NotNull WhiteCard> availableWhitecards) {
         this.availableWhitecards.addAll(availableWhitecards);
+        Collections.shuffle(this.availableWhitecards);
     }
 
     // Methods

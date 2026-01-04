@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 public final class BlackcardsPool {
@@ -17,6 +18,7 @@ public final class BlackcardsPool {
     // Constructors
     public BlackcardsPool(@NotNull final ArrayList<@NotNull BlackCard> availableBlackcards) {
         this.availableBlackcards.addAll(availableBlackcards);
+        Collections.shuffle(this.availableBlackcards);
     }
 
     // Methods

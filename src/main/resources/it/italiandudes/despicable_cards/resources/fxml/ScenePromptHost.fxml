@@ -27,8 +27,14 @@
           <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="textFieldUsername" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Nome Utente" />
-            <PasswordField fx:id="passwordFieldServerPassword" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Server Password [CONSIGLIATA]" GridPane.rowIndex="1" />
+            <TextField fx:id="textFieldUsername" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Nome Utente">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+            <PasswordField fx:id="passwordFieldServerPassword" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Server Password [CONSIGLIATA]" GridPane.rowIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font></PasswordField>
             <GridPane hgap="10.0" GridPane.rowIndex="2">
               <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
@@ -36,27 +42,27 @@
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints valignment="CENTER" vgrow="NEVER" />
+                  <RowConstraints valignment="BOTTOM" vgrow="NEVER" />
                 <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Giocatori Massimi">
+                  <Label contentDisplay="CENTER" text="Giocatori Massimi" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label text="Numero di Round" GridPane.columnIndex="1">
+                  <Label contentDisplay="CENTER" text="Numero di Round" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label text="Porta" GridPane.columnIndex="2">
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Porta" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font></Label>
-                  <Spinner fx:id="spinnerMaxPlayers" maxHeight="1.7976931348623157E308" GridPane.rowIndex="1" />
-                  <Spinner fx:id="spinnerMaxRounds" maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Spinner fx:id="spinnerPort" editable="true" maxHeight="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Spinner fx:id="spinnerMaxPlayers" maxHeight="1.7976931348623157E308" style="-fx-font-size: 18px;" GridPane.rowIndex="1" />
+                  <Spinner fx:id="spinnerMaxRounds" maxHeight="1.7976931348623157E308" style="-fx-font-size: 18px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Spinner fx:id="spinnerPort" editable="true" maxHeight="1.7976931348623157E308" style="-fx-font-size: 18px;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <GridPane hgap="10.0" GridPane.rowIndex="3">
@@ -70,11 +76,11 @@
                <children>
                   <Button fx:id="buttonBack" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#back" text="Indietro">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font></Button>
                   <Button fx:id="buttonCreateLobby" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#createLobby" text="Crea Lobby" GridPane.columnIndex="1">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
                </children>

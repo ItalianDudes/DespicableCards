@@ -47,7 +47,7 @@
                      <children>
                         <Label text="Carta Nera">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
                         <TextArea fx:id="textAreaBlackcard" editable="false" focusTraversable="false" mouseTransparent="true" promptText="Contenuto Carta Nera" wrapText="true" GridPane.rowIndex="1">
@@ -70,7 +70,7 @@
                       <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
                     </rowConstraints>
                      <children>
-                        <ListView fx:id="listViewWhitecards" style="-fx-font-size: 24px;" GridPane.rowIndex="1" />
+                        <ListView fx:id="listViewWhitecards" minWidth="-Infinity" prefWidth="550.0" style="-fx-font-size: 24px;" GridPane.rowIndex="1" />
                         <GridPane vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <columnConstraints>
                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
@@ -100,8 +100,8 @@
                               </Button>
                            </children>
                         </GridPane>
-                        <ListView fx:id="listViewChosenWhitecards" style="-fx-font-size: 24px;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <TextArea fx:id="textAreaWhitecard" editable="false" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mouseTransparent="true" prefWidth="400.0" promptText="Contenuto Carta Bianca" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <ListView fx:id="listViewChosenWhitecards" minWidth="-Infinity" prefWidth="250.0" style="-fx-font-size: 24px;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextArea fx:id="textAreaWhitecard" editable="false" focusTraversable="false" mouseTransparent="true" promptText="Contenuto Carta Bianca" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
@@ -137,17 +137,17 @@
                         </GridPane>
                         <Label text="Carte Bianche Disponibili">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
                         <Label text="Carte Bianche Scelte" GridPane.columnIndex="2">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
                         <Label text="Carta Bianca Selezionata" GridPane.columnIndex="4">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
                      </children>

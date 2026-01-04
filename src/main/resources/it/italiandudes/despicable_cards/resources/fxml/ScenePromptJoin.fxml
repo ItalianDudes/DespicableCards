@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
@@ -12,6 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <!--suppress JavaFxDefaultTag -->
+
 <AnchorPane xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.italiandudes.despicable_cards.javafx.controllers.ControllerScenePromptJoin">
    <children>
       <GridPane vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -25,19 +27,34 @@
           <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="textFieldUsername" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Nome Utente" />
-            <PasswordField fx:id="passwordFieldServerPassword" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Server Password [OPZIONALE]" GridPane.rowIndex="1" />
+            <TextField fx:id="textFieldUsername" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Nome Utente">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+            <PasswordField fx:id="passwordFieldServerPassword" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Server Password [OPZIONALE]" GridPane.rowIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font></PasswordField>
             <GridPane hgap="10.0" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" />
+                  <ColumnConstraints halignment="CENTER" hgrow="NEVER" />
                 <ColumnConstraints halignment="CENTER" hgrow="NEVER" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="textFieldAddress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="250.0" promptText="Indirizzo IPv4" />
-                  <Spinner fx:id="spinnerPort" editable="true" maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" />
+                  <TextField fx:id="textFieldAddress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="250.0" promptText="Indirizzo IPv4">
+                     <font>
+                        <Font size="18.0" />
+                     </font></TextField>
+                  <Label text=":" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="System Bold" size="28.0" />
+                     </font>
+                  </Label>
+                  <Spinner fx:id="spinnerPort" editable="true" maxHeight="1.7976931348623157E308" style="-fx-font-size: 18px;" GridPane.columnIndex="2" />
                </children>
             </GridPane>
             <GridPane hgap="10.0" GridPane.rowIndex="3">
@@ -51,11 +68,11 @@
                <children>
                   <Button fx:id="buttonBack" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#back" text="Indietro">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font></Button>
                   <Button fx:id="buttonConnect" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#connect" text="Connettiti" GridPane.columnIndex="1">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
                </children>

@@ -105,7 +105,7 @@ public final class ControllerSceneGameWinner {
                 closeConnection();
             }
             while (!configurationComplete) Thread.onSpinWait();
-            labelWinner.setText(winnerPlayerData.getUsername());
+            labelWinner.setText("VINCITORE ROUND: "+ winnerPlayerData.getUsername());
             textAreaBlackcard.setText(blackCard.getContent());
             listViewChoices.setItems(FXCollections.observableList(playersChoices));
             Platform.runLater(() -> buttonNext.setDisable(false));

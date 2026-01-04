@@ -18,7 +18,7 @@ public final class DiscordRichPresenceManager {
     }
 
     // Attributes
-    public static final String APPLICATION_ID = null;
+    public static final String APPLICATION_ID = "1457445352507572295";
     public static final String APPLICATION_IMAGE = "despicable_cards";
     private static DiscordRichPresence presence = null;
 

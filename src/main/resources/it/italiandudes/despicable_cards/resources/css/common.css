@@ -23,9 +23,9 @@
     -fx-text-fill: white;
     -fx-prompt-text-fill: darkgray;
 }
-
+/*
 .white-card .content {
     -fx-background-color: white;
     -fx-text-fill: black;
     -fx-prompt-text-fill: darkgray;
-}
+}*/

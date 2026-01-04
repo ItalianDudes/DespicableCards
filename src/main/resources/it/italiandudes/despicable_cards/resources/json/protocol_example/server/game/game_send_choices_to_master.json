@@ -5,11 +5,17 @@
       "combination": [
         {
           "order_index": 0,
-          "content": "content"
+          "card_id": "uuid",
+          "content": "content",
+          "wildcard_content": "content",
+          "wildcard": true
         },
         {
           "order_index": 1,
-          "content": "content"
+          "card_id": "uuid",
+          "content": "content",
+          "wildcard_content": "content",
+          "wildcard": false
         }
       ]
     },
@@ -18,11 +24,17 @@
       "combination": [
         {
           "order_index": 0,
-          "content": "content1"
+          "card_id": "uuid1",
+          "content": "content1",
+          "wildcard_content": "content1",
+          "wildcard": false
         },
         {
           "order_index": 1,
-          "content": "content1"
+          "card_id": "uuid1",
+          "content": "content1",
+          "wildcard_content": "content1",
+          "wildcard": false
         }
       ]
     }

@@ -1,19 +1,42 @@
 {
   "winner": "uuid",
-  "winning_choices": [
-    "text", "text", "text"
-  ],
-  "player_choices": [
+  "players_choices": [
     {
       "player": "uuid",
-      "choices": [
-        "text", "text", "text"
+      "combination": [
+        {
+          "card_id": "uuid",
+          "content": "content",
+          "wildcard": false,
+          "order_index": 0,
+          "wildcard_content": null
+        },
+        {
+          "card_id": "uuid",
+          "content": "content",
+          "wildcard": false,
+          "order_index": 1,
+          "wildcard_content": null
+        }
       ]
     },
     {
-      "player": "uuid1",
-      "choices": [
-        "text", "text", "text"
+      "player": "uuid",
+      "combination": [
+        {
+          "card_id": "uuid",
+          "content": "content",
+          "wildcard": false,
+          "order_index": 0,
+          "wildcard_content": null
+        },
+        {
+          "card_id": "uuid",
+          "content": "content",
+          "wildcard": false,
+          "order_index": 1,
+          "wildcard_content": null
+        }
       ]
     }
   ]

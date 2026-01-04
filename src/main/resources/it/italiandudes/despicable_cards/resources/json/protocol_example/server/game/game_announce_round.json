@@ -3,6 +3,6 @@
   "blackcard": {
     "card_id": "uuid",
     "content": "text",
-    "blanks": "2"
+    "blanks": 2
   }
 }

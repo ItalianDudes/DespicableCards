@@ -17,3 +17,15 @@
 .list-view {
     -fx-focus-traversable: false;
 }
+
+.black-card .content {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: darkgray;
+}
+
+.white-card .content {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: darkgray;
+}

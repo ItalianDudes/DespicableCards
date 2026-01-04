@@ -50,7 +50,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="textAreaBlackcard" editable="false" focusTraversable="false" mouseTransparent="true" promptText="Contenuto Carta Nera" wrapText="true" GridPane.rowIndex="1">
+                        <TextArea fx:id="textAreaBlackcard" editable="false" focusTraversable="false" mouseTransparent="true" promptText="Contenuto Carta Nera" styleClass="black-card" wrapText="true" GridPane.rowIndex="1">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
@@ -101,7 +101,7 @@
                            </children>
                         </GridPane>
                         <ListView fx:id="listViewChosenWhitecards" minWidth="-Infinity" prefWidth="250.0" style="-fx-font-size: 24px;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <TextArea fx:id="textAreaWhitecard" editable="false" focusTraversable="false" mouseTransparent="true" promptText="Contenuto Carta Bianca" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <TextArea fx:id="textAreaWhitecard" editable="false" focusTraversable="false" mouseTransparent="true" promptText="Contenuto Carta Bianca" styleClass="white-card" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>

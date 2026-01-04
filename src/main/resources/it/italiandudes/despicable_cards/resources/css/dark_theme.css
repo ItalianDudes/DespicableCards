@@ -22,9 +22,3 @@
     -fx-text-fill: white;
     -fx-prompt-text-fill: darkgray;
 }
-
-.text-area .content{
-    -fx-background-color: #424242;
-    -fx-text-fill: white;
-    -fx-prompt-text-fill: darkgray;
-}

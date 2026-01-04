@@ -110,7 +110,10 @@ public final class ServerProtocols {
                 for (WhiteCardChoice choice : playerData.getWhiteCardChoices()) {
                     JSONObject choiceJSON = new JSONObject();
                     choiceJSON.put("order_index", choice.orderIndex());
-                    choiceJSON.put("content", choice.whiteCard().isWildcard() ? choice.wildcardContent() : choice.whiteCard().getContent());
+                    choiceJSON.put("card_id", choice.whiteCard().getUuid());
+                    choiceJSON.put("wildcard", choice.whiteCard().isWildcard());
+                    choiceJSON.put("content", choice.whiteCard().getContent());
+                    if (choice.whiteCard().isWildcard()) choiceJSON.put("wildcard_content", choice.wildcardContent());
                     combinationArray.put(choiceJSON);
                 }
                 combination.put("combination", combinationArray);
@@ -137,30 +140,26 @@ public final class ServerProtocols {
             json.put("whitecards", cards);
             return json;
         }
-        public static @NotNull JSONObject getAnnounceWinner(@Nullable final String winnerUuid, @Nullable final ArrayList<@NotNull WhiteCardChoice> winningChoices, @NotNull final ArrayList<ServerPlayerData> playersData) {
+        public static @NotNull JSONObject getAnnounceWinner(@Nullable final String winnerUuid, @NotNull final ArrayList<ServerPlayerData> serverPlayersData) {
             JSONObject json = new JSONObject();
             json.put("winner", winnerUuid);
-            if (winnerUuid != null && winningChoices != null) {
-                JSONArray winningChoicesArray = new JSONArray();
-                for (WhiteCardChoice choice : winningChoices) {
-                    if (choice.whiteCard().isWildcard()) winningChoicesArray.put(choice.wildcardContent());
-                    else winningChoicesArray.put(choice.whiteCard().getContent());
-                }
-                json.put("winning_choices", winningChoicesArray);
-            }
-            JSONArray allChoicesArray = new JSONArray();
-            for (ServerPlayerData playerData : playersData) {
-                JSONObject player = new JSONObject();
-                player.put("player", playerData.getUuid());
-                JSONArray playerChoices = new JSONArray();
+            JSONArray playersChoicesArray = new JSONArray();
+            for (ServerPlayerData playerData : serverPlayersData) {
+                JSONObject combination = new JSONObject();
+                combination.put("player", playerData.getUuid());
+                JSONArray combinationArray = new JSONArray();
                 for (WhiteCardChoice choice : playerData.getWhiteCardChoices()) {
-                    if (choice.whiteCard().isWildcard()) playerChoices.put(choice.wildcardContent());
-                    else playerChoices.put(choice.whiteCard().getContent());
+                    JSONObject choiceJSON = new JSONObject();
+                    choiceJSON.put("order_index", choice.orderIndex());
+                    choiceJSON.put("card_id", choice.whiteCard().getUuid());
+                    choiceJSON.put("wildcard", choice.whiteCard().isWildcard());
+                    choiceJSON.put("content", choice.whiteCard().getContent());
+                    if (choice.whiteCard().isWildcard()) choiceJSON.put("wildcard_content", choice.wildcardContent());
+                    combinationArray.put(choiceJSON);
                 }
-                player.put("choices", playerChoices);
-                allChoicesArray.put(player);
+                combination.put("combination", combinationArray);
             }
-            json.put("player_choices", allChoicesArray);
+            json.put("players_choices", playersChoicesArray);
             return json;
         }
     }

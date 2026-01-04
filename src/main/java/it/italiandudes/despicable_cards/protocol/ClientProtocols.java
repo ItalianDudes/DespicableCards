@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public final class ClientProtocols {
 
     // Handshake JSONObjects
@@ -29,7 +31,7 @@ public final class ClientProtocols {
 
     // Game JSONObjects
     public static final class Game {
-        public static @NotNull JSONObject getSendWhitecards(WhiteCardChoice... choices) {
+        public static @NotNull JSONObject getSendWhitecards(@NotNull final ArrayList<@NotNull WhiteCardChoice> choices) {
             JSONObject json = new JSONObject();
             JSONArray choicesArray = new JSONArray();
             for (WhiteCardChoice choice : choices) {

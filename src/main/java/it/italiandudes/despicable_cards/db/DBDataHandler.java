@@ -1,6 +1,5 @@
-package it.italiandudes.despicable_cards.javafx.utils;
+package it.italiandudes.despicable_cards.db;
 
-import it.italiandudes.despicable_cards.db.DBManager;
 import it.italiandudes.despicable_cards.javafx.Client;
 import it.italiandudes.despicable_cards.utils.Defs;
 import it.italiandudes.idl.javafx.alert.ErrorAlert;

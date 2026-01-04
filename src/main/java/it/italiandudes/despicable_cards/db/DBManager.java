@@ -1,6 +1,5 @@
 package it.italiandudes.despicable_cards.db;
 
-import it.italiandudes.despicable_cards.javafx.utils.DBDataHandler;
 import it.italiandudes.despicable_cards.utils.Defs;
 import org.jetbrains.annotations.NotNull;
 

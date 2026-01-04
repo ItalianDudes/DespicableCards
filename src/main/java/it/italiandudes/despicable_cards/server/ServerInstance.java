@@ -27,7 +27,7 @@ public final class ServerInstance {
     @NotNull private Thread serverStateThread;
 
     // Constructors
-    private ServerInstance(final int port, @Nullable final String password) {
+    private ServerInstance(final int port, @Nullable final String password) { // TODO: check (and eventually create) a directory called "despicable_dbs" in the same directory of the jar, and then check and load all dbs
         this.port = port;
         if (password == null) this.sha512password = null;
         else this.sha512password = DigestUtils.sha512Hex(password);

@@ -57,6 +57,9 @@ public final class JFXDefs {
             public static final class Game {
                 private static final String GAME_DIR = FXML_DIR + "game/";
                 public static final String FXML_LOBBY = GAME_DIR + "SceneGameLobby.fxml";
+                public static final String FXML_PLAYER = GAME_DIR + "SceneGamePlayer.fxml";
+                public static final String FXML_MASTER = GAME_DIR + "SceneGameMaster.fxml";
+                public static final String FXML_WINNER = GAME_DIR + "SceneGameWinner.fxml";
             }
         }
 

@@ -20,17 +20,17 @@ public final class SceneGameLobby {
 
     // Scene Generator
     @NotNull
-    public static SceneController getScene(@NotNull final PlayerData playerData, @NotNull final Socket serverSocket) {
-        return Objects.requireNonNull(genScene(playerData, serverSocket));
+    public static SceneController getScene(@NotNull final PlayerData playerData, @NotNull final Socket connectionToServer) {
+        return Objects.requireNonNull(genScene(playerData, connectionToServer));
     }
     @Nullable
-    private static SceneController genScene(@NotNull final PlayerData playerData, @NotNull final Socket serverSocket) {
+    private static SceneController genScene(@NotNull final PlayerData playerData, @NotNull final Socket connectionToServer) {
         try {
             FXMLLoader loader = new FXMLLoader(Defs.Resources.get(JFXDefs.Resources.FXML.Game.FXML_LOBBY));
             Parent root = loader.load();
             ControllerSceneGameLobby controller = loader.getController();
             controller.setPlayerData(playerData);
-            controller.setConnectionToServer(serverSocket);
+            controller.setConnectionToServer(connectionToServer);
             controller.configurationComplete();
             return new SceneController(root, controller);
         } catch (IOException e) {

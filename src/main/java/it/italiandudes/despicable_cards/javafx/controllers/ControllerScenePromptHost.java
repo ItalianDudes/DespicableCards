@@ -1,6 +1,8 @@
 package it.italiandudes.despicable_cards.javafx.controllers;
 
 import it.italiandudes.despicable_cards.data.player.PlayerData;
+import it.italiandudes.despicable_cards.exceptions.NotEnoughBlackcardsException;
+import it.italiandudes.despicable_cards.exceptions.NotEnoughWhitecardsException;
 import it.italiandudes.despicable_cards.javafx.Client;
 import it.italiandudes.despicable_cards.javafx.scene.game.SceneGameLobby;
 import it.italiandudes.despicable_cards.protocol.ClientProtocols;
@@ -20,6 +22,7 @@ import javafx.scene.control.TextField;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.Socket;
 
 public final class ControllerScenePromptHost {
@@ -35,7 +38,7 @@ public final class ControllerScenePromptHost {
     // Initialize
     @FXML
     private void initialize() {
-        spinnerMaxPlayers.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, Defs.MAX_PLAYERS_LIMIT));
+        spinnerMaxPlayers.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Defs.MIN_PLAYER_LIMIT, Defs.MAX_PLAYERS_LIMIT));
         spinnerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65535, 45000, 1));
         spinnerPort.getEditor().setTextFormatter(UIElementConfigurator.configureNewIntegerTextFormatter());
     }
@@ -68,6 +71,7 @@ public final class ControllerScenePromptHost {
             enableAll();
             return;
         }
+        int maxPlayers = spinnerMaxPlayers.getValue();
         String password = passwordFieldServerPassword.getText();
         if (password.trim().isBlank()) password = null;
         if (password != null) password = DigestUtils.sha512Hex(password);
@@ -83,7 +87,18 @@ public final class ControllerScenePromptHost {
         }
         String finalPassword = password;
         JFXUtils.startVoidServiceTask(() -> {
-            ServerInstance.newInstance(port, finalPassword); // TODO: add maxPlayers
+            try {
+                ServerInstance.newInstance(port, maxPlayers, finalPassword);
+            } catch (IOException e) {
+                Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
+                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Errore di IO", "Si e' verificato un errore durante l'accesso alla cartella dei pacchetti carte."));
+            } catch (NotEnoughWhitecardsException e) {
+                Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
+                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Carte Bianche Insufficienti", "Le carte bianche caricate non sono sufficienti (MIN " + Defs.MIN_WHITECARDS_LOADED + ")."));
+            } catch (NotEnoughBlackcardsException e) {
+                Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
+                Platform.runLater(() -> new ErrorAlert(Client.getStage(), "ERRORE", "Carte Nere Insufficienti", "Le carte nere caricate non sono sufficienti (MIN " + Defs.MIN_BLACKCARDS_LOADED + ")."));
+            }
             Socket socket = null;
             try {
                 socket = new Socket("127.0.0.1", port);

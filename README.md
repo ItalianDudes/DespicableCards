@@ -6,6 +6,7 @@ Altamente consigliato per le persone con un umorismo discutibile.
 L'applicazione richiede Java 21.
 NOTA: Il gioco al momento non dispone di un pacchetto di carte pubblico, per cui sarà necessario crearsene uno proprio!
 NOTA: Per hostare una partita serve che le carte caricate totali (tutte le carte dei database validi presenti nella cartella "despicable_dbs") bianche siano almeno 50 e che quelle nere siano almeno 10.
+NOTA: Per hostare una partita bisogna aver configurato il firewall del computer host (se attivo) con la porta TCP da usare, ed eventualmente aprire la medesima porta TCP anche sul router, se i giocatori sono fuori dalla rete locale.
 
 ## Pacchetti di Carte
 I pacchetti di carte sono dei file database SQLite3.

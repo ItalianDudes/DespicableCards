@@ -10,7 +10,6 @@ import it.italiandudes.despicable_cards.utils.JSONSerializer;
 import it.italiandudes.idl.logger.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -20,6 +19,7 @@ public final class ServerGameThread extends Thread {
     @NotNull private final ServerPlayerData masterPlayerData;
     @NotNull private final BlackCard blackCard;
     private final boolean firstRound;
+    private volatile boolean winnerAnnounced = false;
 
     // Constructors
     public ServerGameThread(@Nullable final ServerPlayerData masterPlayerData, boolean firstRound) {
@@ -40,9 +40,11 @@ public final class ServerGameThread extends Thread {
         }
         return true;
     }
-    @NotNull
-    public ServerPlayerData getMasterPlayerData() {
+    public @NotNull ServerPlayerData getMasterPlayerData() {
         return masterPlayerData;
+    }
+    public void winnerAnnounced() {
+        winnerAnnounced = true;
     }
 
     // Runnable
@@ -57,10 +59,9 @@ public final class ServerGameThread extends Thread {
         * 5.  Send whitecards to players (players receive every time the full hand)
         * 6.  Wait for every player choice
         * 7.  Send master the choices
-        * 8.  Wait for master winner election
-        * 9.  Announce Winner (if round sucks winner=null and next master will be random)
-        * 10. Remove used whitecards from players and replenish whitecards up to card limit
-        * 11. Back to lobby or next round with master = previous winner (or random if winner=null)
+        * 8.  Wait for master server thread announce winner
+        * 9. Remove used whitecards from players and replenish whitecards up to card limit
+        * 10. Back to lobby or next round with master = previous winner (or random if winner=null)
         *
         * */
 
@@ -101,22 +102,17 @@ public final class ServerGameThread extends Thread {
             // 7. Send choices to master
             JSONSerializer.writeJSONObject(masterPlayerData.getSocket().getOutputStream(), ServerProtocols.Game.getSendChoicesToMaster(ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()));
 
-            // 8. Get winner UUID
-            JSONObject winnerMessage = JSONSerializer.readJSONObject(masterPlayerData.getSocket().getInputStream());
-            ServerPlayerData winnerPlayerData = ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayerDataWithUUID(winnerMessage.getString("winner"));
-            String winnerUuid = winnerPlayerData != null ? winnerPlayerData.getUuid() : null;
+            // 8. Wait for winner announce from Master ServerPlayerThread
+            while (!winnerAnnounced) Thread.onSpinWait();
 
-            // 9. Announce Winner (or not)
-            ServerInstance.getInstance().broadcastMessage(ServerProtocols.Game.getAnnounceWinner(winnerUuid, winnerUuid != null ? winnerPlayerData.getWhiteCardChoices() : null, ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()));
-
-            // 10. Remove choices from player whitecards and replenish
+            // 9. Remove choices from player whitecards and replenish
             for (ServerPlayerData playerData : ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData()) {
                 if (playerData.equals(masterPlayerData)) continue;
                 playerData.getWhiteCards().removeAll(playerData.getWhiteCardChoices().stream().map(WhiteCardChoice::whiteCard).toList());
                 playerData.getWhiteCards().addAll(ServerInstance.getInstance().getWhitecardsPool().getRandomWhitecardsAmount(Defs.MAX_WHITECARDS - playerData.getWhiteCards().size()));
             }
 
-            // 11. TEMPORARY: BACK TO LOBBY | NO NEW ROUND
+            // 10. TEMPORARY: BACK TO LOBBY | NO NEW ROUND
             ServerInstance.getInstance().broadcastMessage(ServerProtocols.State.getStateLobby());
         } catch (Exception e) {
             Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);

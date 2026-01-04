@@ -1,5 +1,7 @@
 package it.italiandudes.despicable_cards.server.thread;
 
+import it.italiandudes.despicable_cards.data.card.WhiteCard;
+import it.italiandudes.despicable_cards.data.card.WhiteCardChoice;
 import it.italiandudes.despicable_cards.data.player.ServerPlayerData;
 import it.italiandudes.despicable_cards.protocol.ServerProtocols;
 import it.italiandudes.despicable_cards.protocol.SharedProtocols;
@@ -8,7 +10,10 @@ import it.italiandudes.despicable_cards.utils.Defs;
 import it.italiandudes.despicable_cards.utils.JSONSerializer;
 import it.italiandudes.idl.logger.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public final class ServerPlayerThread extends Thread {
 
@@ -57,29 +62,29 @@ public final class ServerPlayerThread extends Thread {
                 } else if (message.has("ready")) {
                     serverPlayerData.setReady(message.getBoolean("ready"));
                     ServerInstance.getInstance().broadcastMessage(ServerProtocols.Lobby.getLobbyPlayerReadyChange(serverPlayerData.getUuid(), serverPlayerData.isReady()));
-                } else if (message.has("choices")) { // TODO: finish here
-                    /*
+                } else if (message.has("choices")) {
                     ArrayList<WhiteCardChoice> cardChoices = new ArrayList<>();
                     JSONArray cardChoicesArray = message.getJSONArray("choices");
                     for (int i=0; i<cardChoicesArray.length(); i++) {
                         JSONObject choice = cardChoicesArray.getJSONObject(i);
                         String wildcardContent = null;
-
+                        String cardUuid = choice.getString("card_id");
+                        WhiteCard whiteCard = ServerInstance.getInstance().getWhitecardsPool().getWhitecardFromUUID(cardUuid);
+                        if (whiteCard == null) throw new RuntimeException("No whitecard found with uuid #" + cardUuid);
                         // TODO: aggiungere a questo if un controllo per verificare che la carta sia davvero una wildcard tramite check uuid
                         if (choice.has("wildcard_content")) wildcardContent = choice.getString("wildcard_content");
-                        // TODO: recupera la whitecard tramite il suo uuid
-                        cardChoices.add(new WhiteCardChoice(choice.getString("card_id"), choice.getInt("order_index"), wildcardContent));
+                        cardChoices.add(new WhiteCardChoice(whiteCard, choice.getInt("order_index"), wildcardContent));
                     }
-                    serverPlayerData.setWhiteCardChoices(cardChoices);*/
+                    serverPlayerData.setWhiteCardChoices(cardChoices);
                 } else if (message.has("winner") && ServerInstance.getInstance().getServerStateThread() instanceof ServerGameThread gameThread && gameThread.getMasterPlayerData().equals(serverPlayerData)) {
                     String winnerUuid = message.getString("winner");
                     ServerPlayerData winnerData = winnerUuid != null ? ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayerDataWithUUID(winnerUuid) : null;
                     if (serverPlayerData.equals(winnerData)) winnerData = null;
                     ServerInstance.getInstance().broadcastMessage(ServerProtocols.Game.getAnnounceWinner(
                             winnerData != null ? winnerData.getUuid() : null,
-                            winnerData != null ? winnerData.getWhiteCardChoices() : null,
                             ServerInstance.getInstance().getServerPlayerDataManager().getServerPlayersData())
                     );
+                    gameThread.winnerAnnounced();
                 }
             }
         } catch (Exception e) {

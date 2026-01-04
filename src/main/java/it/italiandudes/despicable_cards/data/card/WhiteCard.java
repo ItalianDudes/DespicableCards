@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class WhiteCard extends Group {
 
@@ -12,6 +13,7 @@ public class WhiteCard extends Group {
     @NotNull private final String uuid;
     @NotNull private final String content;
     private final boolean isWildcard;
+    private String wildcardContent = null;
 
     // Constructors
     public WhiteCard(@NotNull final String uuid, @NotNull final String content, final boolean isWildcard) {
@@ -43,19 +45,20 @@ public class WhiteCard extends Group {
     public boolean isWildcard() {
         return isWildcard;
     }
+    public @Nullable String getWildcardContent() {
+        return wildcardContent;
+    }
+    public void setWildcardContent(@Nullable final String wildcardContent) {
+        this.wildcardContent = wildcardContent;
+    }
     @Override
     public final boolean equals(Object o) {
         if (!(o instanceof WhiteCard whiteCard)) return false;
-
-        return isWildcard() == whiteCard.isWildcard() && getCard().equals(whiteCard.getCard()) && getUuid().equals(whiteCard.getUuid()) && getContent().equals(whiteCard.getContent());
+        return getUuid().equals(whiteCard.getUuid());
     }
     @Override
     public int hashCode() {
-        int result = getCard().hashCode();
-        result = 31 * result + getUuid().hashCode();
-        result = 31 * result + getContent().hashCode();
-        result = 31 * result + Boolean.hashCode(isWildcard());
-        return result;
+        return getUuid().hashCode();
     }
     @Override @NotNull
     public String toString() {

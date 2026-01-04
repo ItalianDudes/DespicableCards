@@ -25,6 +25,6 @@ public record WhiteCardChoice(@NotNull WhiteCard whiteCard, int orderIndex, @Nul
     }
     @Override @NotNull
     public String toString() {
-        return String.valueOf(orderIndex);
+        return "#" + orderIndex;
     }
 }

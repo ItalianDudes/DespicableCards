@@ -42,16 +42,13 @@ public class BlackCard extends Group {
     }
     @Override
     public final boolean equals(Object o) {
-        if (!(o instanceof BlackCard that)) return false;
-        return getBlanks() == that.getBlanks() && getCard().equals(that.getCard()) && getUuid().equals(that.getUuid()) && getContent().equals(that.getContent());
+        if (!(o instanceof BlackCard blackCard)) return false;
+
+        return getUuid().equals(blackCard.getUuid());
     }
     @Override
     public int hashCode() {
-        int result = getCard().hashCode();
-        result = 31 * result + getUuid().hashCode();
-        result = 31 * result + getContent().hashCode();
-        result = 31 * result + getBlanks();
-        return result;
+        return getUuid().hashCode();
     }
     @Override @NotNull
     public String toString() {

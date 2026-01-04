@@ -16,6 +16,9 @@ public final class Defs {
     // App File Name
     public static final String APP_FILE_NAME = "DespicableCards";
 
+    // Create Pack From File
+    public static final String ARG_CREATE_PACK_FROM_FILES = "--create-pack-from-files";
+
     // Current Platform
     @Nullable public static final TargetPlatform CURRENT_PLATFORM = TargetPlatform.getCurrentPlatform();
 

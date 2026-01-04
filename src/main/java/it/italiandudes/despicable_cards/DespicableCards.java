@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.function.Predicate;
 import java.util.jar.Attributes;
 
 public final class DespicableCards {
@@ -55,6 +57,18 @@ public final class DespicableCards {
         // Setting Charset to UTF-8
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
         System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8));
+
+        // Execute Pack Creator
+        if (Arrays.stream(args).anyMatch(Predicate.isEqual(Defs.ARG_CREATE_PACK_FROM_FILES))) {
+            try {
+                PackCreator.main(args);
+            } catch (Throwable e) {
+                //noinspection CallToPrintStackTrace
+                e.printStackTrace();
+                System.exit(1);
+            }
+            return;
+        }
 
         // Initializing the logger
         try {

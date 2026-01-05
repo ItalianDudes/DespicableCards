@@ -75,11 +75,11 @@ public final class ServerGameThread extends Thread {
             // Shuffle Players Data
             ServerInstance.getInstance().getServerPlayerDataManager().shuffleServerPlayersData();
 
-            // 1. Reset pools and player whitecards if it's the first round
+            // 1. Reset pools (if checked) and player whitecards if it's the first round
             if (roundNumber == 1) {
                 ServerInstance.getInstance().getServerPlayerDataManager().resetAllPlayersWhitecards();
-                ServerInstance.getInstance().getWhitecardsPool().resetPool();
-                ServerInstance.getInstance().getBlackcardsPool().resetPool();
+                if (ServerInstance.getInstance().isRestoreWhitecardsAtNewRound()) ServerInstance.getInstance().getWhitecardsPool().resetPool();
+                if (ServerInstance.getInstance().isRestoreBlackcardsAtNewRound()) ServerInstance.getInstance().getBlackcardsPool().resetPool();
             }
 
             // 2. Clear up previous player whitecards choices

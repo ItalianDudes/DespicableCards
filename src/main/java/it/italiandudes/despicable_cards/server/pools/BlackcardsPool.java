@@ -18,13 +18,17 @@ public final class BlackcardsPool {
     // Constructors
     public BlackcardsPool(@NotNull final ArrayList<@NotNull BlackCard> availableBlackcards) {
         this.availableBlackcards.addAll(availableBlackcards);
-        Collections.shuffle(this.availableBlackcards);
+        shuffleAvailablePool();
     }
 
     // Methods
     public void resetPool() {
         availableBlackcards.addAll(usedBlackcards);
         usedBlackcards.clear();
+        shuffleAvailablePool();
+    }
+    public void shuffleAvailablePool() {
+        Collections.shuffle(availableBlackcards);
     }
     public @Nullable BlackCard getBlackcardFromUUID(@NotNull final String uuid) {
         Optional<BlackCard> availableOpt = availableBlackcards.stream().filter(card -> card.getUuid().equals(uuid)).findFirst();
@@ -38,6 +42,7 @@ public final class BlackcardsPool {
         BlackCard blackCard = availableBlackcards.get(Randomizer.randomBetween(0, availableBlackcards.size()));
         availableBlackcards.remove(blackCard);
         usedBlackcards.add(blackCard);
+        shuffleAvailablePool();
         return blackCard;
     }
 }

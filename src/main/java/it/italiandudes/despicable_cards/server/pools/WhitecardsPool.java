@@ -18,13 +18,17 @@ public final class WhitecardsPool {
     // Constructors
     public WhitecardsPool(@NotNull final ArrayList<@NotNull WhiteCard> availableWhitecards) {
         this.availableWhitecards.addAll(availableWhitecards);
-        Collections.shuffle(this.availableWhitecards);
+        shuffleAvailablePool();
     }
 
     // Methods
     public void resetPool() {
         availableWhitecards.addAll(usedWhitecards);
         usedWhitecards.clear();
+        shuffleAvailablePool();
+    }
+    public void shuffleAvailablePool() {
+        Collections.shuffle(availableWhitecards);
     }
     public @Nullable WhiteCard getWhitecardFromUUID(@NotNull final String uuid) {
         Optional<WhiteCard> availableOpt = availableWhitecards.stream().filter(card -> card.getUuid().equals(uuid)).findFirst();
@@ -42,6 +46,7 @@ public final class WhitecardsPool {
             availableWhitecards.remove(whiteCard);
             usedWhitecards.add(whiteCard);
         }
+        shuffleAvailablePool();
         return whiteCards;
     }
 }

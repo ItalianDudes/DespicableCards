@@ -15,10 +15,7 @@ import it.italiandudes.idl.javafx.alert.ErrorAlert;
 import it.italiandudes.idl.logger.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 
@@ -30,6 +27,8 @@ public final class ControllerScenePromptHost {
     // Graphic Elements
     @FXML private TextField textFieldUsername;
     @FXML private TextField passwordFieldServerPassword;
+    @FXML private CheckBox checkBoxRestoreWhitecards;
+    @FXML private CheckBox checkBoxRestoreBlackcards;
     @FXML private Spinner<Integer> spinnerMaxPlayers;
     @FXML private Spinner<Integer> spinnerMaxRounds;
     @FXML private Spinner<Integer> spinnerPort;
@@ -47,6 +46,8 @@ public final class ControllerScenePromptHost {
 
     // Methods
     private void disableAll() {
+        checkBoxRestoreWhitecards.setDisable(true);
+        checkBoxRestoreBlackcards.setDisable(true);
         textFieldUsername.setDisable(true);
         passwordFieldServerPassword.setDisable(true);
         spinnerMaxPlayers.setDisable(true);
@@ -56,6 +57,8 @@ public final class ControllerScenePromptHost {
         buttonCreateLobby.setDisable(true);
     }
     private void enableAll() {
+        checkBoxRestoreWhitecards.setDisable(false);
+        checkBoxRestoreBlackcards.setDisable(false);
         textFieldUsername.setDisable(false);
         passwordFieldServerPassword.setDisable(false);
         spinnerMaxPlayers.setDisable(false);
@@ -69,6 +72,8 @@ public final class ControllerScenePromptHost {
     @FXML
     private void createLobby() {
         disableAll();
+        boolean restoreWhitecards = checkBoxRestoreWhitecards.isSelected();
+        boolean restoreBlackcards = checkBoxRestoreBlackcards.isSelected();
         String username = textFieldUsername.getText();
         if (username.trim().isBlank()) {
             new ErrorAlert(Client.getStage(), "ERRORE", "Errore di Inserimento", "Il campo \"Nome Utente\" e' obbligatorio.");
@@ -93,7 +98,7 @@ public final class ControllerScenePromptHost {
         String finalPassword = password;
         JFXUtils.startVoidServiceTask(() -> {
             try {
-                ServerInstance.newInstance(port, maxPlayers, maxRounds, finalPassword);
+                ServerInstance.newInstance(port, maxPlayers, maxRounds, finalPassword, restoreWhitecards, restoreBlackcards);
             } catch (IOException e) {
                 Logger.log(e, Defs.SERVER_LOGGER_CONTEXT);
                 Platform.runLater(() -> {

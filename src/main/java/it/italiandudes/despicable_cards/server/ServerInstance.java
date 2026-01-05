@@ -37,6 +37,8 @@ public final class ServerInstance {
     private final int port;
     private final int maxPlayers;
     private final int maxRounds;
+    private final boolean restoreWhitecardsAtNewRound;
+    private final boolean restoreBlackcardsAtNewRound;
     @NotNull private final ServerListenerThread listener;
     @NotNull private final ServerPlayerDataManager serverPlayerDataManager = new ServerPlayerDataManager();
     @NotNull private Thread serverStateThread;
@@ -44,7 +46,7 @@ public final class ServerInstance {
     @NotNull private final BlackcardsPool blackcardsPool;
 
     // Constructors
-    private ServerInstance(final int port, final int maxPlayers, final int maxRounds, @Nullable final String password) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
+    private ServerInstance(final int port, final int maxPlayers, final int maxRounds, @Nullable final String password, final boolean restoreWhitecardsAtNewRound, final boolean restoreBlackcardsAtNewRound) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
         this.port = port;
         if (maxPlayers >= Defs.MIN_PLAYER_LIMIT && maxPlayers <= Defs.MAX_PLAYERS_LIMIT) this.maxPlayers = maxPlayers;
         else this.maxPlayers = Defs.MAX_PLAYERS_LIMIT;
@@ -54,6 +56,8 @@ public final class ServerInstance {
         ArrayList<WhiteCard> whiteCards = new ArrayList<>();
         ArrayList<BlackCard> blackCards = new ArrayList<>();
         loadCardsFromDB(whiteCards, blackCards);
+        this.restoreBlackcardsAtNewRound = restoreBlackcardsAtNewRound;
+        this.restoreWhitecardsAtNewRound = restoreWhitecardsAtNewRound;
         this.whitecardsPool = new WhitecardsPool(whiteCards);
         this.blackcardsPool = new BlackcardsPool(blackCards);
         this.listener = new ServerListenerThread(port);
@@ -159,6 +163,12 @@ public final class ServerInstance {
     public @NotNull Thread getServerStateThread() {
         return serverStateThread;
     }
+    public boolean isRestoreWhitecardsAtNewRound() {
+        return restoreWhitecardsAtNewRound;
+    }
+    public boolean isRestoreBlackcardsAtNewRound() {
+        return restoreBlackcardsAtNewRound;
+    }
     public void changeServerStateThread(@NotNull final Thread serverStateThread) {
         this.serverStateThread.interrupt();
         this.serverStateThread = serverStateThread;
@@ -199,11 +209,11 @@ public final class ServerInstance {
         INSTANCE.serverStateThread.interrupt();
         INSTANCE = null;
     }
-    public static void newInstance(int port, int maxPlayers, int maxRounds, @Nullable final String password) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
+    public static void newInstance(int port, int maxPlayers, int maxRounds, @Nullable final String password, final boolean restoreWhitecardsAtNewRound, final boolean restoreBlackcardsAtNewRound) throws IOException, NotEnoughWhitecardsException, NotEnoughBlackcardsException {
         if (INSTANCE != null) {
             throw new RuntimeException("Can't create a new ServerInstance while there is already one active.");
         }
-        INSTANCE = new ServerInstance(port, maxPlayers, maxRounds, password);
+        INSTANCE = new ServerInstance(port, maxPlayers, maxRounds, password, restoreWhitecardsAtNewRound, restoreBlackcardsAtNewRound);
     }
     public static ServerInstance getInstance() {
         return INSTANCE;

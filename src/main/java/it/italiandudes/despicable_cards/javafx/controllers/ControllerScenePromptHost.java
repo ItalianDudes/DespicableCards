@@ -42,6 +42,8 @@ public final class ControllerScenePromptHost {
         spinnerMaxRounds.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Defs.MAX_ROUNDS_LIMIT));
         spinnerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65535, 45000, 1));
         spinnerPort.getEditor().setTextFormatter(UIElementConfigurator.configureNewIntegerTextFormatter());
+        checkBoxRestoreWhitecards.setTooltip(new Tooltip("Le carte bianche usate verranno ripristinate comunque in caso finissero le carte bianche disponibili."));
+        checkBoxRestoreBlackcards.setTooltip(new Tooltip("Le carte nere usate verranno ripristinate comunque in caso finissero le carte nere disponibili."));
     }
 
     // Methods

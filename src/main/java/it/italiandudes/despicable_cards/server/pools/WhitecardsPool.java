@@ -46,7 +46,7 @@ public final class WhitecardsPool {
             availableWhitecards.remove(whiteCard);
             usedWhitecards.add(whiteCard);
         }
-        shuffleAvailablePool();
+        shuffleAvailablePool(); // This can cause host lag in case of many players in lobby.
         return whiteCards;
     }
 }

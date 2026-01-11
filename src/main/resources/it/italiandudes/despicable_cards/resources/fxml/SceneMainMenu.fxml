@@ -43,7 +43,6 @@
                             <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
                               <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
                               <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
-                              <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
@@ -62,12 +61,7 @@
                                     <Font name="Lucida Sans Demibold" size="16.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="buttonUpdater" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#checkForUpdates" text="Verifica Aggiornamenti" GridPane.rowIndex="3">
-                                 <font>
-                                    <Font name="Lucida Sans Demibold" size="16.0" />
-                                 </font>
-                              </Button>
-                              <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showReportBanner" text="Segnala un Problema o Proponi un'Idea" GridPane.rowIndex="4">
+                              <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showReportBanner" text="Segnala un Problema o Proponi un'Idea" GridPane.rowIndex="3">
                                  <font>
                                     <Font name="Lucida Sans Demibold" size="16.0" />
                                  </font>

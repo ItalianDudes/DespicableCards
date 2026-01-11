@@ -68,6 +68,8 @@ public final class DespicableCards {
                 System.exit(1);
             }
             return;
+        } else if (Arrays.stream(args).anyMatch(Predicate.isEqual(Defs.ARG_GEN_UUIDS))) {
+            UUIDGenerator.main(args);
         }
 
         // Initializing the logger

@@ -9,7 +9,7 @@ NOTA: Per hostare una partita serve che le carte caricate totali (tutte le carte
 NOTA: Per hostare una partita bisogna aver configurato il firewall del computer host (se attivo) con la porta TCP da usare, ed eventualmente aprire la medesima porta TCP anche sul router, se i giocatori sono fuori dalla rete locale.
 
 IL CODICE SU QUESTA REPOSITORY NON E' PIU' AGGIORNATO PER PREVENIRE IL TRAINING DELLE IA DA PARTE DI MICROSOFT.
-QUESTA REPOSITORY E' URA USATA COME BACKUP PER IL DOWNLOAD DELLE NUOVE RELEASE.
+QUESTA REPOSITORY E' ORA USATA COME BACKUP PER IL DOWNLOAD DELLE NUOVE RELEASE.
 
 ## Pacchetti di Carte
 I pacchetti di carte sono dei file database SQLite3.
